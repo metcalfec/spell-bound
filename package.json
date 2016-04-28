@@ -1,0 +1,22 @@
+{
+  "name": "spell-bound",
+  "version": "1.0.0",
+  "description": "An app for kids who want to practice their spelling while playing a game.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metcalfec/spell-bound.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metcalfec/spell-bound/issues"
+  },
+  "homepage": "https://github.com/metcalfec/spell-bound#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
