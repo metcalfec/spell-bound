@@ -18,9 +18,11 @@
             </div>
             <div class="panel-body" id="button-wrap">
               <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail">
-              <button ng-repeat="letter in game.word.wordArray track by $index" ng-click="game.answer(letter)" type="button" class="btn btn-warning letter-tiles">
-                <p ng-show="game.word.wordArray">{{ letter }}</p>
-              </button>
+              <div ng-repeat="letter in game.word.wordArray track by $index"
+                <button ng-click="game.answerTry(letter)" type="button" class="btn btn-warning letter-tiles">
+                  <p>{{ letter }}</p>
+                </button>
+              </div>
             </div>
           </div>
         </div>

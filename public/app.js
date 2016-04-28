@@ -25,12 +25,9 @@ function game($http) {
     })
   }
 
-  vm.answer = function(letter) {
+  vm.answerTry = function(letter) {
     var currentIndex = vm.letters.indexOf(letter);
-    // var clickedLetters =
     vm.inputAnswer.push((vm.letters.splice(currentIndex, 1)).toString());
     console.log(vm.inputAnswer);
-
-
   }
 }
