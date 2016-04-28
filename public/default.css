@@ -3,9 +3,21 @@
   height: 60px;
   color: white;
   font-size: 30px;
-  margin: 0px 5px 0px 5px;
+  margin: 15px 5px 0px 5px;
 }
 
 #button-wrap {
   text-align: center;
+}
+
+#word-image {
+  width: 600px;
+}
+
+#answer-area {
+  height: 100px;
+}
+
+.answer-letters {
+  display: inline-block;
 }

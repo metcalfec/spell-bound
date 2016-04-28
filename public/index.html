@@ -17,10 +17,26 @@
               <h3 class="panel-title">{{ game.message }}</h3>
             </div>
             <div class="panel-body" id="button-wrap">
-              <img src="" class="img-thumbnail">
-              <button ng-repeat="letter in game.word.newWordArray track by $index" type="button" class="btn btn-warning letter-tiles">
-                <p ng-show="game.word.newWordArray">{{ letter }}</p>
+              <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail">
+              <button ng-repeat="letter in game.word.wordArray track by $index" ng-click="game.answer(letter)" type="button" class="btn btn-warning letter-tiles">
+                <p ng-show="game.word.wordArray">{{ letter }}</p>
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">{{ game.answerText }}</h3>
+            </div>
+            <div id="answer-area" class="panel-body">
+              <div ng-repeat="letter in game.inputAnswer track by $index" class="answer-letters">
+                <button type="button" class="btn btn-warning letter-tiles">
+                  <p>{{ letter }}</p>
+                </button>
+              </div>
             </div>
           </div>
         </div>
