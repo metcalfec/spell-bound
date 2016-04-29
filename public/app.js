@@ -25,9 +25,20 @@ function game($http) {
     })
   }
 
+  //The letter click
   vm.answerTry = function(letter) {
     var currentIndex = vm.letters.indexOf(letter);
     vm.inputAnswer.push((vm.letters.splice(currentIndex, 1)).toString());
     console.log(vm.inputAnswer);
+  }
+
+  //Confirms inputed spelling is correct
+  vm.correct = function() {
+    console.log(vm.inputAnswer.join(''));
+    console.log(vm.word.word);
+    if (vm.inputAnswer.join('') === vm.word.word) {
+      return true;
+    }
+    return false;
   }
 }
