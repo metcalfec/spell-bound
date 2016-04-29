@@ -20,6 +20,7 @@ function game($http) {
     newWord.then(function(info) {
       vm.word = info.data;
       vm.letters = info.data.wordArray;
+      console.log(info.data);
     })
   }
 
@@ -37,6 +38,7 @@ function game($http) {
           $('#correctModal').modal('show');
           return true;
         }
+        $('#incorrectModal').modal('show');
         return false;
       }
     }

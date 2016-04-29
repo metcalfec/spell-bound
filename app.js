@@ -1,20 +1,34 @@
 var express = require('express');
 var app = express();
+var mongo = require('mongodb');
+var myClient = mongo.MongoClient;
+var url = 'mongodb://localhost/spell-bound'
 
 var array = [];
 
 app.use(express.static('./public'));
 
 app.get('/game', function(req, res) {
-  var game = {
-    word: 'APPLE',
-    wordArray: array,
-    image: "http://images.clipartpanda.com/teacher-apple-border-clipart-KTjgkqLTq.jpeg",
-    difficulty: 'Easy'
-  }
-  letterArray(game.word);
-  res.json(game);
-})
+  myClient.connect(url, function(error, db) {
+    if (!error) {
+      var word = db.collection('easy');
+      word.find({}).toArray(function(error, results) {
+        var randomResults = results[Math.floor(Math.random() * results.length)];
+        letterArray(randomResults.word.toUpperCase());
+        var game = {
+          word: randomResults.word.toUpperCase(),
+          wordArray: array,
+          image: randomResults.image
+        }
+        res.json(game);
+        db.close();
+      });
+    } else {
+      res.sendStatus(500);
+      console.log('Could not connect to the database: ' + error);
+    }
+  });
+});
 
 //Explodes words into an array
 function letterArray(word) {
