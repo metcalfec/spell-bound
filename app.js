@@ -16,6 +16,7 @@ app.get('/game', function(req, res) {
   res.json(game);
 })
 
+//Explodes words into an array
 function letterArray(word) {
   array = [];
   for (var i = 0; i < word.length; i++) {
@@ -24,11 +25,12 @@ function letterArray(word) {
   randomArray(array);
 }
 
+//Randomizes array
 function randomArray(array) {
   var x = array.length;
   var tempVal;
   var randIndex;
-  while ( 0 !== x) {
+  while ( x !== 0) {
     randIndex = Math.floor(Math.random() * x);
     x -= 1;
     tempVal = array[x];
@@ -37,7 +39,6 @@ function randomArray(array) {
   }
   return array;
 }
-
 
 app.listen(1337, function() {
   console.log("Listening on port 1337");

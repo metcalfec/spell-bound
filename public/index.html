@@ -32,11 +32,18 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <div ng-show="game.correct() === true">
-                <h1>YOU WIN!</h1>
+                <h1>CORRECT!</h1>
+                <a type="button" class="btn btn-default" href="#/game">Try again?</a>
               </div>
-              <h3 class="panel-title">{{ game.answerText }}</h3>
+              <div ng-show="game.correct() === false">
+                <h1>Me fail english? That's unpossible!</h1>
+                <a type="button" class="btn btn-default" href="#/game">Try again?</a>
+              </div>
             </div>
             <div id="answer-area" class="panel-body">
+              <div ng-show="game.inputAnswer.length === 0">
+                <h3 id="answer-prompt" class="panel-title">{{ game.answerPrompt }}</h3>
+              </div>
               <div ng-repeat="letter in game.inputAnswer track by $index" class="answer-letters">
                 <button type="button" class="btn btn-warning letter-tiles">
                   <p>{{ letter }}</p>

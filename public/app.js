@@ -7,7 +7,7 @@ app.$inject = ['$http'];
 function game($http) {
   var vm = this;
   vm.message = "New Game";
-  vm.answerText = "Answer";
+  vm.answerPrompt = "Click the letters to begin.";
   vm.inputAnswer = [];
   activate();
 
@@ -20,8 +20,6 @@ function game($http) {
     newWord.then(function(info) {
       vm.word = info.data;
       vm.letters = info.data.wordArray;
-      console.log(info.data);
-      console.log(vm.letters);
     })
   }
 
@@ -29,16 +27,18 @@ function game($http) {
   vm.answerTry = function(letter) {
     var currentIndex = vm.letters.indexOf(letter);
     vm.inputAnswer.push((vm.letters.splice(currentIndex, 1)).toString());
-    console.log(vm.inputAnswer);
   }
 
   //Confirms inputed spelling is correct
   vm.correct = function() {
-    console.log(vm.inputAnswer.join(''));
-    console.log(vm.word.word);
-    if (vm.inputAnswer.join('') === vm.word.word) {
-      return true;
+    if (vm.letters !== undefined) {
+      if (vm.letters.length < 1) {
+        if (vm.inputAnswer.join('') === vm.word.word) {
+          $('#correctModal').modal('show');
+          return true;
+        }
+        return false;
+      }
     }
-    return false;
   }
 }

@@ -21,3 +21,10 @@
 .answer-letters {
   display: inline-block;
 }
+
+#answer-prompt {
+  color: lightgrey;
+  font-size: 33px;
+  text-align: center;
+  margin-top: 13px;
+}
