@@ -17,7 +17,7 @@
               <h3 class="panel-title">{{ game.message }}</h3>
             </div>
             <div class="panel-body" id="button-wrap">
-              <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail img-responsiver">
+              <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail img-responsive">
               <br>
               <div ng-repeat="letter in game.word.wordArray track by $index"
                 <button ng-click="game.answerTry(letter)" type="button" class="btn btn-warning letter-tiles">
@@ -47,39 +47,39 @@
         </div>
       </div>
     </div>
-  </div>
-  <!-- Correct Modal -->
-  <div class="modal fade" id="correctModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" id="newGame-close" class="close" data-dismiss="modal"><span>&times;</span></button>
-          <h4 class="modal-title" id="correctModalLabel">CORRECT!</h4>
-        </div>
-        <div class="modal-body">
-        Play again?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Yes</button>
-          <button type="button" class="btn btn-default">No</button>
+    <!-- Correct Modal -->
+    <div class="modal fade" id="correctModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" id="correct-close" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title" id="correctModalLabel">CORRECT!</h4>
+          </div>
+          <div class="modal-body">
+          Play again?
+          </div>
+          <div class="modal-footer">
+            <a ng-click="game.newGame()" type="button" data-dismiss="modal" class="btn btn-primary">Yes</a>
+            <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Incorrect Modal -->
-  <div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" id="newGame-close" class="close" data-dismiss="modal"><span>&times;</span></button>
-          <h4 class="modal-title" id="incorrectModalLabel">INCORRECT!</h4>
-        </div>
-        <div class="modal-body">
-        Try again?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Yes</button>
-          <button type="button" class="btn btn-default">No</button>
+    <!-- Incorrect Modal -->
+    <div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" id="incorrect-close" class="close" data-dismiss="modal"><span>&times;</span></button>
+            <h4 class="modal-title" id="incorrectModalLabel">INCORRECT!</h4>
+          </div>
+          <div class="modal-body">
+          Try again?
+          </div>
+          <div class="modal-footer">
+            <a ng-click="game.retry(game.lastWord)" type="button" data-dismiss="modal" class="btn btn-primary">Yes</a>
+            <button type="button" data-dismiss="modal" class="btn btn-default">No</button>
+          </div>
         </div>
       </div>
     </div>
