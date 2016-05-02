@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var users = require('./users.js');
 var port = process.env.PORT || 1337;
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
