@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+var users = require('./users.js');
+var port = process.env.PORT || 1337;
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var mongo = require('mongodb');
@@ -65,6 +67,8 @@ function letterArray(word) {
 //Randomizes array
 function randomArray(array) {
   var x = array.length;
+  var y = array.length - 1;
+  var first = array[0];
   var tempVal;
   var randIndex;
   while ( x !== 0) {
@@ -73,6 +77,12 @@ function randomArray(array) {
     tempVal = array[x];
     array[x] = array[randIndex];
     array[randIndex] = tempVal;
+  }
+  if (array[0] === first) {
+    var i = array[0];
+    var j = array[y];
+    array[0] = j;
+    array[y] = i;
   }
   return array;
 }
@@ -89,6 +99,6 @@ function titleCase(word) {
   return wordArray.join(' ');
 }
 
-app.listen(1337, function() {
-  console.log("Listening on port 1337");
-})
+app.listen(port, function() {
+ console.log("listening on port " + port);
+});
