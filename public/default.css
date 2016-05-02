@@ -68,7 +68,7 @@
   margin-left: 10px;
 }
 
-#correct {
+.verdict {
   display: block;
   margin-top: -215px;
   margin-left: auto;
@@ -88,4 +88,37 @@
 
 #side-panel-rt {
   border-radius: 30px;
+}
+
+.play-btn {
+  height: 50px;
+  width: 300px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  padding-top: 2px;
+  background-color: #FF6600;
+  border-radius: 40px;
+}
+
+.submit-name {
+  height: 70px;
+  width: 190px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
+  margin-top: 105px;
+}
+
+#name-input {
+  margin-left: 25%;
+  width: 50%;
+  height: 50px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50px;
 }

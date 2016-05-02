@@ -1,5 +1,34 @@
 var app = angular.module('spellBound', []);
 
+app.controller('homeController', home);
+
+app.$inject = ['$http'];
+
+function home($http) {
+  var vm = this;
+  vm.login = function(userName) {
+    var user = {};
+    user.name = userName;
+    console.log(user);
+    var sendLogin = $http.post('http://localhost:1337/login/', user);
+    sendLogin.then(function(response) {
+      console.log(response);
+    })
+  }
+
+  vm.checkLogin = function() {
+    var checkLogin = $http.get('http://localhost:1337/login/');
+    checkLogin.then(function(response) {
+      if (response.data === "fail") {
+        $('#loginModal').modal('show');
+      } else {
+        // vm.loggedOut = false;
+      }
+    })
+  }
+}
+
+
 app.controller('gameController', game);
 
 app.$inject = ['$http'];
@@ -69,17 +98,5 @@ function game($http) {
     } else {
       getGame();
     }
-
   }
-
-  // //Get a new word
-  // vm.newGame = function() {
-  //   vm.inputAnswer = [];
-  //   getGame();
-  // }
-
-  vm.hint = function() {
-
-  }
-
 }
