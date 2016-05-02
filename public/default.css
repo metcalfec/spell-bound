@@ -1,9 +1,9 @@
 .letter-tiles {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   color: white;
   font-size: 30px;
-  margin: 15px 5px 0px 5px;
+  margin: 45px 3px 0px 3px;
 }
 
 #button-wrap {
@@ -11,7 +11,11 @@
 }
 
 #word-image {
-  width: 500px;
+  display: block;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 30px;
 }
 
 #answer-area {
@@ -19,6 +23,7 @@
 }
 
 .answer-letters {
+  margin-top: -40px;
   display: inline-block;
 }
 
@@ -27,4 +32,60 @@
   font-size: 33px;
   text-align: center;
   margin-top: 13px;
+}
+
+.modal-content {
+  margin-top: 70px;
+  border: 7px solid #FFF;
+  background-color: #E1D4C0;
+  height: 400px;
+  border-radius: 33px;
+}
+
+.play-again {
+  height: 70px;
+  width: 190px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
+  margin-top: 160px;
+  margin-left: 230px;
+}
+
+.main {
+  height: 70px;
+  width: 110px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #6699FF;
+  border-radius: 20px;
+  margin-top: 160px;
+  margin-left: 10px;
+}
+
+#correct {
+  display: block;
+  margin-top: -215px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+}
+
+#game-board {
+  margin-top: 30px;
+  background-color: #6699FF;
+  height: 460px;
+}
+
+#side-panel-lt {
+  border-radius: 30px;
+}
+
+#side-panel-rt {
+  border-radius: 30px;
 }

@@ -43,6 +43,12 @@ function game($http) {
     vm.inputAnswer.push((vm.letters.splice(currentIndex, 1)).toString());
   }
 
+  //Undo letter click
+  vm.undo = function(letter) {
+    var currentIndex = vm.inputAnswer.indexOf(letter);
+    vm.letters.push((vm.inputAnswer.splice(currentIndex, 1)).toString());
+  }
+
   //Spell checks inputed answer
   vm.correct = function() {
     if (vm.letters !== undefined && vm.letters.length < 1 && vm.inputAnswer.length !== 0) {
@@ -55,15 +61,25 @@ function game($http) {
     }
   }
 
-//Retry last word
-  vm.retry = function(word) {
+  //Play again
+  vm.playAgain = function(word) {
     vm.inputAnswer = [];
-    getGame(word);
+    if (word !== undefined) {
+      getGame(word);
+    } else {
+      getGame();
+    }
+
   }
 
-//Get a new word
-  vm.newGame = function() {
-    vm.inputAnswer = [];
-    getGame();
+  // //Get a new word
+  // vm.newGame = function() {
+  //   vm.inputAnswer = [];
+  //   getGame();
+  // }
+
+  vm.hint = function() {
+
   }
+
 }
