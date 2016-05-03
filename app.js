@@ -19,7 +19,7 @@ app.get('/check/login', function(req, res) {
     var credentials = {
       verify: 'pass',
       user: req.cookies.name
-    }
+    };
     res.send(credentials);
   } else {
     res.send('fail');
@@ -33,7 +33,12 @@ app.get('/check/login/:user', function(req, res) {
       var users = db.collection('users');
       users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
         if (results.length !== 0) {
-          res.send(true);
+          var credentials = {
+            found: true,
+            user: titleCase(currentUser)
+          };
+          res.cookie('name', titleCase(currentUser));
+          res.send(credentials);
           db.close();
         } else {
           res.send(false)
@@ -50,10 +55,26 @@ app.get('/check/login/:user', function(req, res) {
 app.post('/login', function(req, res) {
   myClient.connect(url, function(error, db) {
     if (!error) {
-      newUser = req.body.name;
+      var newUser = req.body.name;
       var users = db.collection('users');
       users.insert({name: titleCase(newUser)}, function(error, results) {
         res.cookie('name', titleCase(newUser));
+        res.send();
+        db.close();
+      });
+    } else {
+      res.sendStatus(500);
+      console.log('Could not connect to the database: ' + error);
+    }
+  });
+});
+
+app.delete('/login/:user', function(req, res) {
+  myClient.connect(url, function(error, db) {
+    if (!error) {
+      var user = req.params.user;
+      var users = db.collection('users');
+      users.remove({name: titleCase(user)}, function(error, results) {
         res.send();
         db.close();
       });

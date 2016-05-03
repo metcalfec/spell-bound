@@ -40,8 +40,8 @@
           <div class="modal-content">
             <div id="prompt-modal-body" class="modal-body">
               <img class="verdict" src="/images/oops.png">
-              <button ng-click="home.login(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default continue-btn center-block">Continue</button>
-              <button ng-click="home.login(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default start-over-btn center-block">Start Over</button>
+              <button ng-click="home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default continue-btn center-block">Continue</button>
+              <button ng-click="home.removeUser(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default start-over-btn center-block">Start Over</button>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
                 <div id="prompt-modal-body" class="modal-body">
                   <img class="verdict" src="/images/correct.png">
                   <button ng-click="game.playAgain()" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
-                  <button type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+                  <button ng-click="home.loggedIn = false; game.playAgain()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@
                 <div id="prompt-modal-body" class="modal-body">
                   <img class="verdict" src="/images/oops.png">
                   <button ng-click="game.playAgain(game.lastWord)" type="button" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
-                  <button type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+                  <button ng-click="home.loggedIn = false; game.playAgain()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
                 </div>
               </div>
             </div>

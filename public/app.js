@@ -27,7 +27,8 @@ function home($http) {
   vm.login = function(user) {
     var sendLogin = $http.get('/check/login/' + user);
     sendLogin.then(function(response) {
-      if (response.data === true) {
+      if (response.data.found === true) {
+        vm.currentUser = response.data.user;
         $('#continueModal').modal('show');
       } else {
         vm.addUser(user);
@@ -35,13 +36,21 @@ function home($http) {
     })
   }
 
-  //Add new user
+  //Add a user
   vm.addUser = function(user) {
     var login = {}
     login.name = user;
-    var newUser = $http.post('/login/', login);
-    newUser.then(function(response) {
+    var added = $http.post('/login/', login);
+    added.then(function(response) {
       vm.checkLogin();
+    })
+  }
+
+  //Delete a user
+  vm.removeUser = function(user) {
+    var removed = $http.delete('/login/' + user);
+    removed.then(function(response) {
+      vm.addUser(user);
     })
   }
 }
