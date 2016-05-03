@@ -130,6 +130,30 @@
   margin-top: 105px;
 }
 
+.continue-btn {
+  height: 70px;
+  width: 190px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
+  margin-top: 105px;
+}
+
+.start-over-btn {
+  height: 70px;
+  width: 190px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #6699FF;
+  border-radius: 20px;
+  margin-top: 105px;
+}
+
 #name-input {
   margin-left: 25%;
   width: 50%;
