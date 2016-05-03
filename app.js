@@ -10,7 +10,7 @@ var url = 'mongodb://localhost/spell-bound'
 
 var array = [];
 
-app.use(express.static('./public'));
+app.use(express.static('./public/'));
 app.use(cookieParser());
 
 app.get('/login', function(req, res) {
