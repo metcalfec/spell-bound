@@ -3,6 +3,7 @@ var app = express();
 var port = process.env.PORT || 1337;
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+var cookieParser = require('cookie-parser');
 var mongo = require('mongodb');
 var myClient = mongo.MongoClient;
 var url = 'mongodb://localhost/spell-bound'
@@ -10,6 +11,40 @@ var url = 'mongodb://localhost/spell-bound'
 var array = [];
 
 app.use(express.static('./public'));
+app.use(cookieParser());
+
+app.get('/login', function(req, res) {
+  if (req.cookies.name !== undefined) {
+    var credentials = {
+      verify: 'pass',
+      user: req.cookies.name
+    }
+    res.send(credentials);
+  } else {
+    res.send('fail');
+  }
+});
+
+app.get('/login/:user', function(req, res) {
+  myClient.connect(url, function(error, db) {
+    if (!error) {
+      currentUser = req.params.user;
+      var users = db.collection('users');
+      users.insert({name: titleCase(currentUser)}, function(error, results) {
+        res.cookie('name', titleCase(currentUser));
+        var credentials = {
+          verify: 'pass',
+          user: currentUser
+        }
+        res.send(credentials);
+        db.close();
+      });
+    } else {
+      res.sendStatus(500);
+      console.log('Could not connect to the database: ' + error);
+    }
+  });
+});
 
 app.get('/game', function(req, res) {
   myClient.connect(url, function(error, db) {

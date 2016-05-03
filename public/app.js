@@ -1,5 +1,38 @@
 var app = angular.module('spellBound', []);
 
+app.controller('homeController', home);
+
+app.$inject = ['$http'];
+
+function home($http) {
+  var vm = this;
+  vm.currentUser;
+  vm.greeting = "Hello there";
+  vm.loggedIn = false;
+
+  //User login
+  vm.login = function(user) {
+    var sendLogin = $http.get('http://localhost:1337/login/'+ user);
+    sendLogin.then(function(response) {
+      vm.currentUser = response.data.user;
+    })
+  }
+
+  //Cookie check
+  vm.checkLogin = function() {
+    var checkLogin = $http.get('http://localhost:1337/login/');
+    checkLogin.then(function(response) {
+      if (response.data === "fail") {
+        $('#loginModal').modal('show');
+      } else {
+        vm.loggedIn = true;
+        vm.currentUser = response.data.user;
+      }
+    })
+  }
+}
+
+
 app.controller('gameController', game);
 
 app.$inject = ['$http'];
@@ -16,7 +49,7 @@ function game($http) {
     getGame();
   }
 
-//Word delegation
+  //Word delegation
   function getGame(retry) {
     if (retry !== undefined) {
       var repeat = {};
@@ -69,17 +102,5 @@ function game($http) {
     } else {
       getGame();
     }
-
   }
-
-  // //Get a new word
-  // vm.newGame = function() {
-  //   vm.inputAnswer = [];
-  //   getGame();
-  // }
-
-  vm.hint = function() {
-
-  }
-
 }
