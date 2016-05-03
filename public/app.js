@@ -12,7 +12,7 @@ function home($http) {
 
   //User login
   vm.login = function(user) {
-    var sendLogin = $http.get('http://localhost/login/'+ user);
+    var sendLogin = $http.get('http://localhost:/login/'+ user);
     sendLogin.then(function(response) {
       vm.currentUser = response.data.user;
     })
@@ -20,7 +20,7 @@ function home($http) {
 
   //Cookie check
   vm.checkLogin = function() {
-    var checkLogin = $http.get('http://localhost/login/');
+    var checkLogin = $http.get('http://localhost:/login/');
     checkLogin.then(function(response) {
       if (response.data === "fail") {
         $('#loginModal').modal('show');
@@ -54,14 +54,14 @@ function game($http) {
     if (retry !== undefined) {
       var repeat = {};
       repeat.word = retry;
-      var retryWord = $http.post('http://localhost/game/', repeat);
+      var retryWord = $http.post('http://localhost:/game/', repeat);
       retryWord.then(function(info) {
         vm.word = info.data;
         vm.lastWord = vm.word.word;
         vm.letters = info.data.wordArray;
       })
     } else {
-      var newWord = $http.get('http://localhost/game/');
+      var newWord = $http.get('http://localhost:/game/');
       newWord.then(function(info) {
         vm.word = info.data;
         vm.lastWord = vm.word.word;
