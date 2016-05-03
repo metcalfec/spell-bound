@@ -10,17 +10,9 @@ function home($http) {
   vm.greeting = "Hello there";
   vm.loggedIn = false;
 
-  //User login
-  vm.login = function(user) {
-    var sendLogin = $http.get('/login/'+ user);
-    sendLogin.then(function(response) {
-      vm.currentUser = response.data.user;
-    })
-  }
-
-  //Cookie check
+  //Check for cookies
   vm.checkLogin = function() {
-    var checkLogin = $http.get('/login/');
+    var checkLogin = $http.get('/check/login/');
     checkLogin.then(function(response) {
       if (response.data === "fail") {
         $('#loginModal').modal('show');
@@ -28,6 +20,28 @@ function home($http) {
         vm.loggedIn = true;
         vm.currentUser = response.data.user;
       }
+    })
+  }
+
+  //Check db for user
+  vm.login = function(user) {
+    var sendLogin = $http.get('/check/login/' + user);
+    sendLogin.then(function(response) {
+      if (response.data === true) {
+        $('#continueModal').modal('show');
+      } else {
+        vm.addUser(user);
+      }
+    })
+  }
+
+  //Add new user
+  vm.addUser = function(user) {
+    var login = {}
+    login.name = user;
+    var newUser = $http.post('/login/', login);
+    newUser.then(function(response) {
+      vm.checkLogin();
     })
   }
 }

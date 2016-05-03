@@ -12,8 +12,9 @@ var array = [];
 
 app.use(express.static('./public/'));
 app.use(cookieParser());
+app.use(jsonParser);
 
-app.get('/login', function(req, res) {
+app.get('/check/login', function(req, res) {
   if (req.cookies.name !== undefined) {
     var credentials = {
       verify: 'pass',
@@ -25,18 +26,35 @@ app.get('/login', function(req, res) {
   }
 });
 
-app.get('/login/:user', function(req, res) {
+app.get('/check/login/:user', function(req, res) {
   myClient.connect(url, function(error, db) {
     if (!error) {
       currentUser = req.params.user;
       var users = db.collection('users');
-      users.insert({name: titleCase(currentUser)}, function(error, results) {
-        res.cookie('name', titleCase(currentUser));
-        var credentials = {
-          verify: 'pass',
-          user: currentUser
+      users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
+        if (results.length !== 0) {
+          res.send(true);
+          db.close();
+        } else {
+          res.send(false)
+          db.close();
         }
-        res.send(credentials);
+      });
+    } else {
+      res.sendStatus(500);
+      console.log('Could not connect to the database: ' + error);
+    }
+  });
+});
+
+app.post('/login', function(req, res) {
+  myClient.connect(url, function(error, db) {
+    if (!error) {
+      newUser = req.body.name;
+      var users = db.collection('users');
+      users.insert({name: titleCase(newUser)}, function(error, results) {
+        res.cookie('name', titleCase(newUser));
+        res.send();
         db.close();
       });
     } else {
@@ -68,7 +86,7 @@ app.get('/game', function(req, res) {
   });
 });
 
-app.post('/game', jsonParser, function(req, res) {
+app.post('/game', function(req, res) {
   myClient.connect(url, function(error, db) {
     if (!error) {
       var word = db.collection('easy');
