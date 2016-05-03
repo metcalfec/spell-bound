@@ -6,7 +6,7 @@ var jsonParser = bodyParser.json();
 var cookieParser = require('cookie-parser');
 var mongo = require('mongodb');
 var myClient = mongo.MongoClient;
-var url = 'mongodb://localhost/spell-bound'
+var url = 'mongodb://metcalfec:calv1n@ds013212.mlab.com:13212/spell-bound'
 
 var array = [];
 
