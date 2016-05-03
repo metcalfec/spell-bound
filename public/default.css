@@ -90,15 +90,31 @@
   border-radius: 30px;
 }
 
+.main-btns {
+  margin-top: 100px;
+}
+
 .play-btn {
-  height: 50px;
+  padding-top: 20px;
+  height: 100px;
   width: 300px;
   color: #FFF;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: bold;
   font-family: Comic Sans MS;
-  padding-top: 2px;
   background-color: #FF6600;
+  border-radius: 40px;
+}
+
+.leaderboard-btn {
+  margin-top: 20px;
+  height: 100px;
+  width: 300px;
+  color: #FFF;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #6699FF;
   border-radius: 40px;
 }
 

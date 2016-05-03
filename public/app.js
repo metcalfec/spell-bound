@@ -6,23 +6,27 @@ app.$inject = ['$http'];
 
 function home($http) {
   var vm = this;
-  vm.login = function(userName) {
-    var user = {};
-    user.name = userName;
-    console.log(user);
-    var sendLogin = $http.post('http://localhost:1337/login/', user);
+  vm.currentUser;
+  vm.greeting = "Hello there";
+  vm.loggedIn = false;
+
+  //User login
+  vm.login = function(user) {
+    var sendLogin = $http.get('http://localhost:1337/login/'+ user);
     sendLogin.then(function(response) {
-      console.log(response);
+      vm.currentUser = response.data.user;
     })
   }
 
+  //Cookie check
   vm.checkLogin = function() {
     var checkLogin = $http.get('http://localhost:1337/login/');
     checkLogin.then(function(response) {
       if (response.data === "fail") {
         $('#loginModal').modal('show');
       } else {
-        // vm.loggedOut = false;
+        vm.loggedIn = true;
+        vm.currentUser = response.data.user;
       }
     })
   }
@@ -45,7 +49,7 @@ function game($http) {
     getGame();
   }
 
-//Word delegation
+  //Word delegation
   function getGame(retry) {
     if (retry !== undefined) {
       var repeat = {};

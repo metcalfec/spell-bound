@@ -14,20 +14,29 @@ app.use(express.static('./public'));
 app.use(cookieParser());
 
 app.get('/login', function(req, res) {
-  if (req.cookies.loggedin === 'true') {
-    res.send('pass');
+  if (req.cookies.name !== undefined) {
+    var credentials = {
+      verify: 'pass',
+      user: req.cookies.name
+    }
+    res.send(credentials);
   } else {
     res.send('fail');
   }
 });
 
-app.post('/login', jsonParser, function(req, res) {
+app.get('/login/:user', function(req, res) {
   myClient.connect(url, function(error, db) {
     if (!error) {
+      currentUser = req.params.user;
       var users = db.collection('users');
-      users.insert({name: titleCase(req.body.name)}, function(error, results) {
-        res.cookie('loggedin', 'true');
-        res.send('pass');
+      users.insert({name: titleCase(currentUser)}, function(error, results) {
+        res.cookie('name', titleCase(currentUser));
+        var credentials = {
+          verify: 'pass',
+          user: currentUser
+        }
+        res.send(credentials);
         db.close();
       });
     } else {

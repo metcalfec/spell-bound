@@ -10,15 +10,15 @@
 <body ng-app="spellBound">
   <div class="container">
     <div ng-controller="homeController as home">
-      <div>
+      <div ng-hide="home.loggedIn" class="main-btns">
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4">
-            <button ng-click="home.checkLogin()" type="button" class="btn btn-default play-btn center-block">Play</button>
+            <a ng-click="home.checkLogin()" type="button" href="#/game" class="btn btn-default play-btn center-block">Play</a>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4">
-            <button type="button" class="btn btn-default play-btn center-block">Leaderboard</button>
+            <button type="button" class="btn btn-default leaderboard-btn center-block">Leaderboard</button>
           </div>
         </div>
       </div>
@@ -29,79 +29,88 @@
             <div id="prompt-modal-body" class="modal-body">
               <img class="verdict" src="/images/oops.png">
               <input ng-model="home.name" id="name-input" class="form-control" placeholder="Enter your name...">
-              <button ng-click="home.login(home.name)" type="button" data-dismiss="modal" class="btn btn-default submit-name center-block">Begin</button>
+              <button ng-click="home.login(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default submit-name center-block">Begin</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div ng-controller="gameController as game">
-      <div class="row">
-        <div class="col-sm-12">
-          <div id="game-board" class="panel panel-default">
-            <div class="panel-body">
-              <div class="col-xs-3 col-sm-3">
-                <div id="side-panel-lt">
-                </div>
-              </div>
-              <div class="col-xs-6 col-sm-6">
-                <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail img-responsive">
-              </div>
-              <div class="col-xs-3 col-sm-3">
+      <div ng-show="home.loggedIn">
+        <div ng-controller="gameController as game">
+          <div class="row">
+            <div class="col-sm-12">
+              <span class="pull-right">
+                {{ home.greeting }} {{ home.currentUser }}
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div id="game-board" class="panel panel-default">
                 <div class="panel-body">
+                  <div class="col-xs-3 col-sm-3">
+                    <div id="side-panel-lt">
+                    </div>
+                  </div>
+                  <div class="col-xs-6 col-sm-6">
+                    <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail img-responsive">
+                  </div>
+                  <div class="col-xs-3 col-sm-3">
+                    <div class="panel-body">
+                    </div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div id="button-wrap">
+                      <span ng-repeat="letter in game.word.wordArray track by $index">
+                        <button ng-click="game.answerTry(letter)" type="button" class="btn btn-warning letter-tiles">
+                          <p>{{ letter }}</p>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-sm-12">
-                <div id="button-wrap">
-                  <span ng-repeat="letter in game.word.wordArray track by $index">
-                    <button ng-click="game.answerTry(letter)" type="button" class="btn btn-warning letter-tiles">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+              <div class="panel panel-default">
+                <div ng-show="game.correct() === true"></div>
+                <div ng-show="game.correct() === false"></div>
+                <div id="answer-area" class="panel-body">
+                  <div ng-show="game.inputAnswer.length === 0">
+                    <h3 id="answer-prompt" class="panel-title">{{ game.answerPrompt }}</h3>
+                  </div>
+                  <div ng-repeat="letter in game.inputAnswer track by $index" class="answer-letters">
+                    <button ng-click="game.undo(letter)" type="button" class="btn btn-warning letter-tiles">
                       <p>{{ letter }}</p>
                     </button>
-                  </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
-          <div class="panel panel-default">
-            <div ng-show="game.correct() === true"></div>
-            <div ng-show="game.correct() === false"></div>
-            <div id="answer-area" class="panel-body">
-              <div ng-show="game.inputAnswer.length === 0">
-                <h3 id="answer-prompt" class="panel-title">{{ game.answerPrompt }}</h3>
-              </div>
-              <div ng-repeat="letter in game.inputAnswer track by $index" class="answer-letters">
-                <button ng-click="game.undo(letter)" type="button" class="btn btn-warning letter-tiles">
-                  <p>{{ letter }}</p>
-                </button>
+          <!-- Correct Modal -->
+          <div class="modal fade" id="correctModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div id="prompt-modal-body" class="modal-body">
+                  <img class="verdict" src="/images/correct.png">
+                  <button ng-click="game.playAgain()" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
+                  <button type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- Correct Modal -->
-      <div class="modal fade" id="correctModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div id="prompt-modal-body" class="modal-body">
-              <img class="verdict" src="/images/correct.png">
-              <button ng-click="game.playAgain()" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
-              <button type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Incorrect Modal -->
-      <div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div id="prompt-modal-body" class="modal-body">
-              <img class="verdict" src="/images/oops.png">
-              <button ng-click="game.playAgain(game.lastWord)" type="button" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
-              <button type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+          <!-- Incorrect Modal -->
+          <div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div id="prompt-modal-body" class="modal-body">
+                  <img class="verdict" src="/images/oops.png">
+                  <button ng-click="game.playAgain(game.lastWord)" type="button" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
+                  <button type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
