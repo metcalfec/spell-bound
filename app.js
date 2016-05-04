@@ -128,6 +128,26 @@ app.post('/game', function(req, res) {
   });
 });
 
+// app.put('/game/streak', function(req, res) {
+//   console.log("hi");
+  // myClient.connect(url, function(error, db) {
+  //   if (!error) {
+  //     var user = db.collection('users');
+  //     user.update(
+  //       {
+  //         name: titleCase(req.body.word),
+  //         streak:
+  //       }).toArray(function(error, results) {
+  //       res.json(game);
+  //       db.close();
+  //     });
+  //   } else {
+  //     res.sendStatus(500);
+  //     console.log('Could not connect to the database: ' + error);
+  //   }
+  // });
+// });
+
 //Explodes words into an array
 function letterArray(word) {
   array = [];

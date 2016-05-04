@@ -2,8 +2,13 @@
   width: 50px;
   height: 50px;
   color: white;
+  font-family: Comic Sans MS;
   font-size: 30px;
   margin: 45px 3px 0px 3px;
+}
+
+.letters {
+  margin-top: -3px;
 }
 
 #button-wrap {
