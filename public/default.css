@@ -1,3 +1,11 @@
+body {
+  background: url(images/background.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .letter-tiles {
   width: 50px;
   height: 50px;
@@ -15,6 +23,10 @@
   text-align: center;
 }
 
+#starting-area {
+  height: 100px;
+}
+
 #word-image {
   display: block;
   width: 300px;
@@ -24,7 +36,9 @@
 }
 
 #answer-area {
+  text-align: center;
   height: 100px;
+  margin-top: 130px;
 }
 
 .answer-letters {
@@ -47,7 +61,15 @@
   border-radius: 33px;
 }
 
+.modal-button-options {
+  display: block;
+  margin-top: 160px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .play-again {
+  margin-right: 20px;
   height: 70px;
   width: 190px;
   color: #FFF;
@@ -56,11 +78,33 @@
   font-family: Comic Sans MS;
   background-color: #FF6600;
   border-radius: 20px;
-  margin-top: 160px;
-  margin-left: 230px;
+}
+
+.submit {
+  height: 70px;
+  width: 135px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
+}
+
+.continue-btn {
+  margin-right: 20px;
+  height: 70px;
+  width: 160px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
 }
 
 .main {
+  margin-right: 10px;
   height: 70px;
   width: 110px;
   color: #FFF;
@@ -69,8 +113,6 @@
   font-family: Comic Sans MS;
   background-color: #6699FF;
   border-radius: 20px;
-  margin-top: 160px;
-  margin-left: 10px;
 }
 
 .verdict {
@@ -79,12 +121,6 @@
   margin-left: auto;
   margin-right: auto;
   width: 400px;
-}
-
-#game-board {
-  margin-top: 30px;
-  background-color: #6699FF;
-  height: 460px;
 }
 
 #side-panel-lt {
@@ -123,30 +159,6 @@
   border-radius: 40px;
 }
 
-.submit-name {
-  height: 70px;
-  width: 190px;
-  color: #FFF;
-  font-size: 30px;
-  font-weight: bold;
-  font-family: Comic Sans MS;
-  background-color: #FF6600;
-  border-radius: 20px;
-  margin-top: 105px;
-}
-
-.continue-btn {
-  height: 70px;
-  width: 190px;
-  color: #FFF;
-  font-size: 30px;
-  font-weight: bold;
-  font-family: Comic Sans MS;
-  background-color: #FF6600;
-  border-radius: 20px;
-  margin-top: 105px;
-}
-
 .start-over-btn {
   height: 70px;
   width: 190px;
@@ -156,14 +168,54 @@
   font-family: Comic Sans MS;
   background-color: #6699FF;
   border-radius: 20px;
-  margin-top: 105px;
 }
 
 #name-input {
-  margin-left: 25%;
-  width: 50%;
+  position: absolute;
+  margin-top: 20px;
+  margin-left: 18%;
+  width: 60%;
   height: 50px;
   display: inline-block;
   text-align: center;
   border-radius: 50px;
+}
+
+.yellow-star {
+  color: yellow;
+}
+
+#star-count {
+  margin-top: -45px;
+  text-align: center;
+  font-size: 20px;
+  font-family: Comic Sans MS;
+}
+
+#streak-count {
+  position: absolute;
+  font-size: 60px;
+  margin-top: 450px;
+}
+#streak-count-label {
+  position: absolute;
+  font-size: 20px;
+  margin-top: 520px;
+  margin-left: -22px;
+}
+
+#streak-remaining {
+  position: absolute;
+  font-size: 12px;
+  margin-top: 550px;
+  margin-left: -32px;
+}
+
+#login-prompt {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  margin-top: -80px;
+  margin-left: -10px;
+  font-family: Comic Sans MS;
 }

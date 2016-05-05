@@ -10,33 +10,41 @@ function game($http) {
   vm.answerPrompt = "Click the letters to begin.";
   vm.inputAnswer = [];
   vm.lastWord;
+  vm.verdict;
+  vm.streakCount = 0;
+  vm.nextLevel = 10 + " until next level";
   activate();
 
   function activate() {
-    getGame();
+    startGame();
   }
 
-  //Word delegation
-  function getGame(retry) {
-    if (retry !== undefined) {
-      var repeat = {};
-      repeat.word = retry;
-      var retryWord = $http.post('/game/', repeat);
-      retryWord.then(function(info) {
-        vm.word = info.data;
-        vm.lastWord = vm.word.word;
-        vm.letters = info.data.wordArray;
-      })
-    } else {
-      var newWord = $http.get('/game/');
-      newWord.then(function(info) {
-        vm.word = info.data;
-        vm.lastWord = vm.word.word;
-        vm.letters = info.data.wordArray;
-      })
-    }
+  function getGame(word) {
+    var gameStats = {};
+    gameStats.word = word;
+    gameStats.pass = vm.verdict;
+    gameStats.streak = vm.streak;
+    var theGame = $http.post('/game/', gameStats);
+    theGame.then(function(response) {
+      console.log(response);
+      vm.word = response.data;
+      vm.lastWord = vm.word.word;
+      vm.letters = response.data.wordArray;
+      vm.streakCount = response.data.streak;
+      vm.nextLevel = (10 - vm.streakCount) + " until next level"
+    })
   }
 
+  function startGame() {
+    var newWord = $http.get('/game/');
+    newWord.then(function(response) {
+      vm.word = response.data;
+      vm.lastWord = vm.word.word;
+      vm.letters = response.data.wordArray;
+      vm.streakCount = response.data.streak;
+      vm.nextLevel = (10 - vm.streakCount) + " until next level"
+    })
+  }
   //The letter click
   vm.answerTry = function(letter) {
     var currentIndex = vm.letters.indexOf(letter);
@@ -62,12 +70,12 @@ function game($http) {
   }
 
   //Play again
-  vm.playAgain = function(word) {
+  vm.playAgain = function(word, verdict) {
     vm.inputAnswer = [];
-    if (word !== undefined) {
-      getGame(word);
-    } else {
-      getGame();
+    vm.verdict = verdict;
+    if (verdict === false) {
+      vm.streakCount = 0;
     }
+    getGame(word);
   }
 }

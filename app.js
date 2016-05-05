@@ -9,6 +9,8 @@ var myClient = mongo.MongoClient;
 var url = 'mongodb://metcalfec:calv1n@ds013212.mlab.com:13212/spell-bound'
 
 var array = [];
+var streakCount = 0;
+var currentUser;
 
 app.use(express.static('./public/'));
 app.use(cookieParser());
@@ -16,9 +18,27 @@ app.use(jsonParser);
 
 app.get('/check/login', function(req, res) {
   if (req.cookies.name !== undefined) {
+    currentUser = req.cookies.name;
+    myClient.connect(url, function(error, db) {
+      if (!error) {
+        var users = db.collection('users');
+        users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
+          if (results.length !== 0) {
+            streakCount = results[0].streak;
+            db.close();
+          } else {
+            db.close();
+          }
+        });
+      } else {
+        res.sendStatus(500);
+        console.log('Could not connect to the database: ' + error);
+      }
+    });
     var credentials = {
       verify: 'pass',
-      user: req.cookies.name
+      user: req.cookies.name,
+      streak: streakCount
     };
     res.send(credentials);
   } else {
@@ -35,7 +55,8 @@ app.get('/check/login/:user', function(req, res) {
         if (results.length !== 0) {
           var credentials = {
             found: true,
-            user: titleCase(currentUser)
+            user: titleCase(currentUser),
+            streak: results[0].streak
           };
           res.cookie('name', titleCase(currentUser));
           res.send(credentials);
@@ -57,7 +78,12 @@ app.post('/login', function(req, res) {
     if (!error) {
       var newUser = req.body.name;
       var users = db.collection('users');
-      users.insert({name: titleCase(newUser)}, function(error, results) {
+      users.insert(
+        {
+          name: titleCase(newUser),
+          streak: 0
+        },
+        function(error, results) {
         res.cookie('name', titleCase(newUser));
         res.send();
         db.close();
@@ -95,7 +121,8 @@ app.get('/game', function(req, res) {
         var game = {
           word: randomResults.word.toUpperCase(),
           wordArray: array,
-          image: randomResults.image
+          image: randomResults.image,
+          streak: streakCount
         }
         res.json(game);
         db.close();
@@ -108,19 +135,83 @@ app.get('/game', function(req, res) {
 });
 
 app.post('/game', function(req, res) {
+  console.log(req.body)
   myClient.connect(url, function(error, db) {
     if (!error) {
-      var word = db.collection('easy');
-      word.find({word: titleCase(req.body.word)}).toArray(function(error, results) {
-        letterArray(results[0].word.toUpperCase());
-        var game = {
-          word: results[0].word.toUpperCase(),
-          wordArray: array,
-          image: results[0].image
+      if(req.body.pass !== undefined) {
+        if (req.body.pass === true) {
+          streakCount += 1;
+          var updateUser = db.collection('users')
+          updateUser.update(
+            {name: titleCase(currentUser)},
+            {$set: {streak: streakCount}},
+            function(error, results) {
+          });
+          var theWord = db.collection('easy');
+          theWord.find({}).toArray(function(error, results) {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              streak: streakCount,
+              hints: 0
+            }
+            res.send(game);
+            db.close();
+          });
+        } else {
+          streakCount = 0;
+          console.log(currentUser)
+          var updateUser = db.collection('users')
+          updateUser.update(
+            {name: titleCase(currentUser)},
+            {$set: {streak: streakCount}},
+            function(error, results) {
+          });
+          var theWord = db.collection('easy');
+          theWord.find({word: titleCase(req.body.word)}).toArray(function(error, results) {
+            letterArray(results[0].word.toUpperCase());
+            var redo = {
+              word: results[0].word.toUpperCase(),
+              wordArray: array,
+              image: results[0].image,
+              streak: streakCount,
+              hints: 0
+            }
+            console.log(redo)
+            res.send(redo);
+            db.close();
+          });
         }
-        res.json(game);
-        db.close();
-      });
+      } else {
+        if (req.body.word ===true) {
+          streakCount +=1;
+        } else {
+          streakCount = 0;
+        }
+        var updateUser = db.collection('users')
+        updateUser.update(
+          {name: titleCase(currentUser)},
+          {$set: {streak: streakCount}},
+          function(error, results) {
+        });
+        var word = db.collection('easy');
+        word.find({}).toArray(function(error, results) {
+          console.log(results)
+          var randomResults = results[Math.floor(Math.random() * results.length)];
+          letterArray(randomResults.word.toUpperCase());
+          var game = {
+            word: randomResults.word.toUpperCase(),
+            wordArray: array,
+            image: randomResults.image,
+            streak: streakCount
+          }
+          res.json(game);
+          db.close();
+        });
+      }
     } else {
       res.sendStatus(500);
       console.log('Could not connect to the database: ' + error);

@@ -27,9 +27,14 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div id="prompt-modal-body" class="modal-body">
-              <img class="verdict" src="/images/oops.png">
+              <img class="verdict" src="/images/player.png">
+              <div id="login-prompt">
+                <h3>Please enter your first name to begin playing</h3>
+              </div>
               <input ng-model="home.name" id="name-input" class="form-control" placeholder="Enter your name...">
-              <button ng-click="home.login(home.name)" type="button" data-dismiss="modal" class="btn btn-default submit-name center-block">Begin</button>
+              <div class="modal-button-options">
+                <button ng-click="home.login(home.name)" type="button" data-dismiss="modal" class="btn btn-default submit center-block">Submit</button>
+              </div>
             </div>
           </div>
         </div>
@@ -39,9 +44,11 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div id="prompt-modal-body" class="modal-body">
-              <img class="verdict" src="/images/oops.png">
-              <button ng-click="home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default continue-btn center-block">Continue</button>
-              <button ng-click="home.removeUser(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default start-over-btn center-block">Start Over</button>
+              <img class="verdict" src="/images/continue.png">
+              <div class="modal-button-options pull-right">
+                <button ng-click="home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default continue-btn">Continue</button>
+                <button ng-click="home.removeUser(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default start-over-btn">Start Over</button>
+              </div>
             </div>
           </div>
         </div>
