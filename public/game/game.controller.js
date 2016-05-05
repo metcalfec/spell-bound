@@ -12,7 +12,6 @@ function game($http) {
   vm.lastWord;
   vm.verdict;
   vm.streakCount = 0;
-  vm.nextLevel = 10 + " until next level";
   activate();
 
   function activate() {
@@ -26,12 +25,12 @@ function game($http) {
     gameStats.streak = vm.streak;
     var theGame = $http.post('/game/', gameStats);
     theGame.then(function(response) {
-      console.log(response);
       vm.word = response.data;
       vm.lastWord = vm.word.word;
       vm.letters = response.data.wordArray;
       vm.streakCount = response.data.streak;
-      vm.nextLevel = (10 - vm.streakCount) + " until next level"
+      vm.completedWords = response.data.completed;
+      streak(response.data.streak);
     })
   }
 
@@ -42,7 +41,8 @@ function game($http) {
       vm.lastWord = vm.word.word;
       vm.letters = response.data.wordArray;
       vm.streakCount = response.data.streak;
-      vm.nextLevel = (10 - vm.streakCount) + " until next level"
+      vm.completedWords = response.data.completed;
+      streak(response.data.streak);
     })
   }
   //The letter click
@@ -77,5 +77,22 @@ function game($http) {
       vm.streakCount = 0;
     }
     getGame(word);
+  }
+  function streak(number) {
+    if (number % 10 !== 0) {
+      if (number > 10) {
+        var x = number.toString().split('');
+        console.log(x);
+        while (x.length > 1) {
+          x.pop(0);
+        }
+        console.log(x)
+        vm.nextLevel = (10 - x[0]) + " until next level";
+      } else {
+        vm.nextLevel = (10 - number) + " until next level";
+      }
+    } else {
+      vm.nextLevel = 10 + " until next level";
+    }
   }
 }

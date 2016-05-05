@@ -11,6 +11,7 @@ var url = 'mongodb://metcalfec:calv1n@ds013212.mlab.com:13212/spell-bound'
 var array = [];
 var streakCount = 0;
 var currentUser;
+var completedWords = [];
 
 app.use(express.static('./public/'));
 app.use(cookieParser());
@@ -25,6 +26,15 @@ app.get('/check/login', function(req, res) {
         users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
           if (results.length !== 0) {
             streakCount = results[0].streak;
+            completedWords = results[0].completed;
+            var credentials = {
+              verify: 'pass',
+              user: req.cookies.name,
+              streak: streakCount,
+              completed: completedWords
+            };
+            console.log(credentials)
+            res.send(credentials);
             db.close();
           } else {
             db.close();
@@ -35,12 +45,6 @@ app.get('/check/login', function(req, res) {
         console.log('Could not connect to the database: ' + error);
       }
     });
-    var credentials = {
-      verify: 'pass',
-      user: req.cookies.name,
-      streak: streakCount
-    };
-    res.send(credentials);
   } else {
     res.send('fail');
   }
@@ -56,7 +60,7 @@ app.get('/check/login/:user', function(req, res) {
           var credentials = {
             found: true,
             user: titleCase(currentUser),
-            streak: results[0].streak
+            streak: results[0].streak,
           };
           res.cookie('name', titleCase(currentUser));
           res.send(credentials);
@@ -81,7 +85,8 @@ app.post('/login', function(req, res) {
       users.insert(
         {
           name: titleCase(newUser),
-          streak: 0
+          streak: 0,
+          completed: []
         },
         function(error, results) {
         res.cookie('name', titleCase(newUser));
@@ -122,7 +127,8 @@ app.get('/game', function(req, res) {
           word: randomResults.word.toUpperCase(),
           wordArray: array,
           image: randomResults.image,
-          streak: streakCount
+          streak: streakCount,
+          completed: completedWords
         }
         res.json(game);
         db.close();
@@ -140,8 +146,14 @@ app.post('/game', function(req, res) {
     if (!error) {
       if(req.body.pass !== undefined) {
         if (req.body.pass === true) {
+          console.log(req.body);
           streakCount += 1;
           var updateUser = db.collection('users')
+          updateUser.update(
+            {name: titleCase(currentUser)},
+            {$push: {completed: titleCase(req.body.word)}},
+            function(error, results) {
+          });
           updateUser.update(
             {name: titleCase(currentUser)},
             {$set: {streak: streakCount}},
@@ -156,7 +168,7 @@ app.post('/game', function(req, res) {
               wordArray: array,
               image: randomResults.image,
               streak: streakCount,
-              hints: 0
+              completed: completedWords
             }
             res.send(game);
             db.close();
@@ -218,26 +230,6 @@ app.post('/game', function(req, res) {
     }
   });
 });
-
-// app.put('/game/streak', function(req, res) {
-//   console.log("hi");
-  // myClient.connect(url, function(error, db) {
-  //   if (!error) {
-  //     var user = db.collection('users');
-  //     user.update(
-  //       {
-  //         name: titleCase(req.body.word),
-  //         streak:
-  //       }).toArray(function(error, results) {
-  //       res.json(game);
-  //       db.close();
-  //     });
-  //   } else {
-  //     res.sendStatus(500);
-  //     console.log('Could not connect to the database: ' + error);
-  //   }
-  // });
-// });
 
 //Explodes words into an array
 function letterArray(word) {
