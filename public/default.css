@@ -30,6 +30,7 @@ body {
 #word-image {
   display: block;
   width: 300px;
+  height: 300px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 30px;
@@ -37,12 +38,12 @@ body {
 
 #answer-area {
   text-align: center;
-  height: 100px;
-  margin-top: 130px;
+  /*height: 100px;*/
+  /*margin-top: 50px;*/
 }
 
 .answer-letters {
-  margin-top: -40px;
+  /*margin-top: -40px;*/
   display: inline-block;
 }
 
@@ -50,7 +51,7 @@ body {
   color: lightgrey;
   font-size: 33px;
   text-align: center;
-  margin-top: 13px;
+  /*margin-top: 13px;*/
 }
 
 .modal-content {
@@ -123,14 +124,6 @@ body {
   width: 400px;
 }
 
-#side-panel-lt {
-  border-radius: 30px;
-}
-
-#side-panel-rt {
-  border-radius: 30px;
-}
-
 .main-btns {
   margin-top: 100px;
 }
@@ -181,34 +174,23 @@ body {
   border-radius: 50px;
 }
 
-.yellow-star {
-  color: yellow;
-}
-
-#star-count {
-  margin-top: -45px;
-  text-align: center;
-  font-size: 20px;
-  font-family: Comic Sans MS;
-}
-
 #streak-count {
-  position: absolute;
+  /*margin-top: -20px;*/
   font-size: 60px;
-  margin-top: 450px;
 }
 #streak-count-label {
-  position: absolute;
   font-size: 20px;
-  margin-top: 520px;
-  margin-left: -22px;
 }
 
 #streak-remaining {
-  position: absolute;
+  /*margin-top: -25px;*/
   font-size: 12px;
-  margin-top: 550px;
-  margin-left: -32px;
+}
+
+#streak-wrapper {
+  text-align: center;
+  /*margin-top: 150px;*/
+  height: 150px;
 }
 
 #login-prompt {
@@ -218,4 +200,20 @@ body {
   margin-top: -80px;
   margin-left: -10px;
   font-family: Comic Sans MS;
+}
+
+#completed-title {
+  text-align: center;
+  font-size: 25px;
+  font-family: Comic Sans MS;
+}
+
+#completed-words {
+  max-height: 300px;
+  overflow-y:scroll;
+  border-radius: 30px;
+}
+
+.clouds {
+  margin-top: 100px;
 }

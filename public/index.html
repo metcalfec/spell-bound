@@ -13,7 +13,7 @@
       <div ng-hide="home.loggedIn" class="main-btns">
         <div class="row">
           <div class="col-sm-4 col-sm-offset-4">
-            <a ng-click="home.checkLogin()" href="#/game" class="btn btn-default play-btn center-block">Play</a>
+            <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">Play</a>
           </div>
         </div>
         <div class="row">
@@ -34,20 +34,6 @@
               <input ng-model="home.name" id="name-input" class="form-control" placeholder="Enter your name...">
               <div class="modal-button-options">
                 <button ng-click="home.login(home.name)" type="button" data-dismiss="modal" class="btn btn-default submit center-block">Submit</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Continue Modal -->
-      <div class="modal fade" id="continueModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div id="prompt-modal-body" class="modal-body">
-              <img class="verdict" src="/images/continue.png">
-              <div class="modal-button-options pull-right">
-                <button ng-click="home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default continue-btn">Continue</button>
-                <button ng-click="home.removeUser(home.name); home.loggedIn = true" type="button" data-dismiss="modal" class="btn btn-default start-over-btn">Start Over</button>
               </div>
             </div>
           </div>
