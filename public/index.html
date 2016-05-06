@@ -8,39 +8,29 @@
   <title>spell-bound</title>
 </head>
 <body ng-app="spellBound">
-  <div class="container">
-    <div ng-controller="homeController as home">
-      <div ng-hide="home.loggedIn" class="main-btns">
-        <div class="row">
-          <div class="col-sm-4 col-sm-offset-4">
-            <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">Play</a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-4 col-sm-offset-4">
-            <button type="button" class="btn btn-default leaderboard-btn center-block">Leaderboard</button>
-          </div>
-        </div>
-      </div>
-      <!-- Login Modal -->
-      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div id="prompt-modal-body" class="modal-body">
-              <img class="verdict" src="/images/player.png">
-              <div id="login-prompt">
-                <h3>Please enter your first name to begin playing</h3>
-              </div>
-              <input ng-model="home.name" id="name-input" class="form-control" placeholder="Enter your name...">
-              <div class="modal-button-options">
-                <button ng-click="home.login(home.name)" type="button" data-dismiss="modal" class="btn btn-default submit center-block">Submit</button>
-              </div>
+  <div ng-controller="homeController as home">
+    <div ng-show="home.loggedIn">
+      <div ng-view></div>
+    </div>
+    <div ng-hide="home.loggedIn" class="main-btns">
+      <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">Play</a>
+      <button type="button" class="btn btn-default leaderboard-btn center-block">Leaderboard</button>
+    </div>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div id="prompt-modal-body" class="modal-body">
+            <img class="verdict" src="/images/player.png">
+            <div id="login-prompt">
+              <h3>Please enter your first name to begin playing</h3>
+            </div>
+            <input ng-model="home.name" id="name-input" class="form-control" placeholder="Enter your name...">
+            <div class="modal-button-options">
+              <button ng-click="home.login(home.name)" type="button" data-dismiss="modal" class="btn btn-default submit center-block">Submit</button>
             </div>
           </div>
         </div>
-      </div>
-      <div ng-show="home.loggedIn">
-        <div ng-view></div>
       </div>
     </div>
   </div>

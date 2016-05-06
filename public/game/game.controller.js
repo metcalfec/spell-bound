@@ -14,6 +14,7 @@ function game($http) {
   vm.streakCount = 0;
   vm.completedWords = [];
   vm.currentUser;
+  vm.levelCount = 1;
   activate();
 
   function activate() {
