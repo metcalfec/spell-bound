@@ -10,47 +10,38 @@ function home($http) {
   vm.greeting = "Hello there";
   vm.loggedIn = false;
 
-  //Check for cookies
-  vm.checkLogin = function() {
-    var checkLogin = $http.get('/check/login/');
-    checkLogin.then(function(response) {
-      if (response.data === "fail") {
-        $('#loginModal').modal('show');
-      } else {
-        vm.loggedIn = true;
-        vm.currentUser = response.data.user;
-      }
-    })
-  }
-
-  //Check db for user
+  //Query user
   vm.login = function(user) {
-    var sendLogin = $http.get('/check/login/' + user);
+    if (user !== undefined) {
+      var sendLogin = $http.get('/check/login/' + user);
+    } else {
+      var sendLogin = $http.get('/check/login/');
+    }
     sendLogin.then(function(response) {
-      if (response.data.found === true) {
-        vm.currentUser = response.data.user;
-        $('#continueModal').modal('show');
+      if (response.data !== 'fail') {
+        if (response.data === true) {
+          console.log("Please pick another name")
+        }
+        else if (response.data.verify === "pass") {
+          vm.loggedIn = true;
+          vm.currentUser = response.data.user;
+        } else {
+          vm.addUser(user);
+        }
       } else {
-        vm.addUser(user);
+        $('#loginModal').modal('show');
       }
     })
   }
 
   //Add a user
   vm.addUser = function(user) {
-    var login = {}
-    login.name = user;
-    var added = $http.post('/login/', login);
+    var newUser = {}
+    newUser.name = user;
+    var added = $http.post('/user/', newUser);
     added.then(function(response) {
-      vm.checkLogin();
-    })
-  }
-
-  //Delete a user
-  vm.removeUser = function(user) {
-    var removed = $http.delete('/login/' + user);
-    removed.then(function(response) {
-      vm.addUser(user);
+      vm.loggedIn = true;
+      vm.currentUser = response.data.user;
     })
   }
 }

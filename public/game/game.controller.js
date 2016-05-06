@@ -12,39 +12,52 @@ function game($http) {
   vm.lastWord;
   vm.verdict;
   vm.streakCount = 0;
-  vm.nextLevel = 10 + " until next level";
+  vm.completedWords = [];
+  vm.currentUser;
   activate();
 
   function activate() {
     startGame();
   }
 
-  function getGame(word) {
-    var gameStats = {};
-    gameStats.word = word;
-    gameStats.pass = vm.verdict;
-    gameStats.streak = vm.streak;
-    var theGame = $http.post('/game/', gameStats);
-    theGame.then(function(response) {
-      console.log(response);
-      vm.word = response.data;
-      vm.lastWord = vm.word.word;
-      vm.letters = response.data.wordArray;
-      vm.streakCount = response.data.streak;
-      vm.nextLevel = (10 - vm.streakCount) + " until next level"
-    })
-  }
-
+  //Initial game
   function startGame() {
-    var newWord = $http.get('/game/');
+    var cookie = {name: (document.cookie.split('=').pop())};
+    if (cookie !== undefined) {
+      var newWord = $http.post('/game/remembered/', cookie);
+    } else {
+      var newWord = $http.get('/game/');
+    }
     newWord.then(function(response) {
       vm.word = response.data;
       vm.lastWord = vm.word.word;
       vm.letters = response.data.wordArray;
       vm.streakCount = response.data.streak;
-      vm.nextLevel = (10 - vm.streakCount) + " until next level"
+      vm.completedWords = response.data.completed;
+      console.log(response.data)
+      // vm.currentUser = (document.cookie.split('=').pop());
+      streak(response.data.streak);
     })
   }
+
+  //New word
+  function getGame(word) {
+    var gameStats = {};
+    gameStats.word = word;
+    gameStats.pass = vm.verdict;
+    gameStats.streak = vm.streak;
+    gameStats.completed = vm.completedWords;
+    var theGame = $http.post('/game/', gameStats);
+    theGame.then(function(response) {
+      vm.word = response.data;
+      vm.lastWord = vm.word.word;
+      vm.letters = response.data.wordArray;
+      vm.streakCount = response.data.streak;
+      vm.completedWords = response.data.completed;
+      streak(response.data.streak);
+    })
+  }
+
   //The letter click
   vm.answerTry = function(letter) {
     var currentIndex = vm.letters.indexOf(letter);
@@ -77,5 +90,22 @@ function game($http) {
       vm.streakCount = 0;
     }
     getGame(word);
+  }
+
+  //Streak counter
+  function streak(number) {
+    if (number % 10 !== 0) {
+      if (number > 10) {
+        var x = number.toString().split('');
+        while (x.length > 1) {
+          x.pop(0);
+        }
+        vm.nextLevel = (10 - x[0]) + " until next level";
+      } else {
+        vm.nextLevel = (10 - number) + " until next level";
+      }
+    } else {
+      vm.nextLevel = 10 + " until next level";
+    }
   }
 }
