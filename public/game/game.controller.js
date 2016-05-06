@@ -26,6 +26,8 @@ function game($http) {
     if (cookie !== undefined) {
       var newWord = $http.post('/game/remembered/', cookie);
     } else {
+      vm.streakCount = 0;
+      vm.completedWords = [];
       var newWord = $http.get('/game/');
     }
     newWord.then(function(response) {
@@ -34,8 +36,6 @@ function game($http) {
       vm.letters = response.data.wordArray;
       vm.streakCount = response.data.streak;
       vm.completedWords = response.data.completed;
-      console.log(response.data)
-      // vm.currentUser = (document.cookie.split('=').pop());
       streak(response.data.streak);
     })
   }

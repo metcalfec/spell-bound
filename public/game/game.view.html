@@ -66,6 +66,12 @@
       <div class="modal-content">
         <div id="prompt-modal-body" class="modal-body">
           <img class="verdict" src="/images/correct.png">
+          <div id="fun-fact">
+            <p id="the-word">{{ game.word.caps }}</p>
+            <p id="sound">{{ game.word.sound }}</p>
+            <p id="speech">{{ game.word.speech }}</p>
+            <p id="definition">{{ game.word.definition }}</p>
+          </div>
           <div class="modal-button-options pull-right">
             <button ng-click="game.playAgain(game.lastWord, true)" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
             <button ng-click="home.loggedIn = false; game.playAgain(game.lastWord, true); game.quit()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>

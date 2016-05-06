@@ -19,6 +19,8 @@ app.use(jsonParser);
 
 //Login check
 app.get('/check/login', function(req, res) {
+  streakCount = 0;
+  completedWords = [];
   if (req.cookies.name !== undefined) {
     myClient.connect(url, function(error, db) {
       if (!error) {
@@ -53,6 +55,8 @@ app.get('/check/login', function(req, res) {
 
 //Check if user exists in db
 app.get('/check/login/:user', function(req, res) {
+  streakCount = 0;
+  completedWords = [];
   myClient.connect(url, function(error, db) {
     if (!error) {
       currentUser = req.params.user;
@@ -75,6 +79,8 @@ app.get('/check/login/:user', function(req, res) {
 
 //Add new user to db
 app.post('/user', function(req, res) {
+  streakCount = 0;
+  completedWords = [];
   myClient.connect(url, function(error, db) {
     if (!error) {
       currentUser = req.body.name;
@@ -105,6 +111,8 @@ app.post('/user', function(req, res) {
 
 //Initial game
 app.get('/game', function(req, res) {
+  streakCount = 0;
+  completedWords = [];
   myClient.connect(url, function(error, db) {
     if (!error) {
       var word = db.collection('easy');
@@ -115,6 +123,10 @@ app.get('/game', function(req, res) {
           word: randomResults.word.toUpperCase(),
           wordArray: array,
           image: randomResults.image,
+          caps: randomResults.word.toUpperCase(),
+          sound: randomResults.sound,
+          speech: randomResults.speech,
+          definition: randomResults.definition,
           streak: 0,
           completed: []
         }
@@ -130,6 +142,8 @@ app.get('/game', function(req, res) {
 
 //Return to game if cookies are present
 app.post('/game/remembered', function(req, res) {
+  streakCount = 0;
+  completedWords = [];
   myClient.connect(url, function(error, db) {
     if (!error) {
       currentUser = req.body.name;
@@ -148,6 +162,10 @@ app.post('/game/remembered', function(req, res) {
           word: randomResults.word.toUpperCase(),
           wordArray: array,
           image: randomResults.image,
+          caps: randomResults.word.toUpperCase(),
+          sound: randomResults.sound,
+          speech: randomResults.speech,
+          definition: randomResults.definition,
           streak: streakCount,
           completed: completedWords
         }
@@ -187,6 +205,10 @@ app.post('/game', function(req, res) {
             word: randomResults.word.toUpperCase(),
             wordArray: array,
             image: randomResults.image,
+            caps: randomResults.word.toUpperCase(),
+            sound: randomResults.sound,
+            speech: randomResults.speech,
+            definition: randomResults.definition,
             streak: streakCount,
             completed: completedWords
           }
@@ -208,6 +230,10 @@ app.post('/game', function(req, res) {
             word: results[0].word.toUpperCase(),
             wordArray: array,
             image: results[0].image,
+            caps: results[0].word.toUpperCase(),
+            sound: results[0].sound,
+            speech: results[0].speech,
+            definition: results[0].definition,
             streak: streakCount,
             completed: completedWords
           }
