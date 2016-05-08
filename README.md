@@ -1,4 +1,4 @@
 # spell-bound
-An app for kids who want to practice their spelling while playing a game.
+A spelling app for kids that encourages learning new vocabulary in an exciting game format.
 
-https://sheltered-shelf-94092.herokuapp.com/
+https://spellbound.herokuapp.com/
