@@ -1,94 +1,117 @@
-<div ng-controller="gameController as game">
-  <div class="row">
-    <div class="col-sm-12">
-      <span class="pull-right">
-        {{ home.greeting }} {{ home.currentUser }}
-      </span>
-    </div>
+<nav class="navbar navbar-default">
+  <div class="navbar-header">
+    <a class="navbar-brand" id="brand-large" href="#/main">Spell-bound</a>
   </div>
+  <ul class="nav navbar-nav navbar-right">
+    <li><p id="login-name" class="navbar-text">Playing as <strong>{{ home.currentUser }}</strong></p></li>
+  </ul>
+</nav>
+<div class="container">
   <div class="row">
-    <div class="col-xs-3 col-sm-3">
-      <div id="completed-words">
-        <ul class="list-group">
-          <li id="completed-title" class="list-group-item">Completed Words</li>
-          <li ng-repeat="word in game.completedWords track by $index" class="list-group-item text-center">{{ word }}
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-xs-6 col-sm-6">
-      <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail img-responsive">
-    </div>
-    <div class="col-xs-3 col-sm-3">
-    </div>
-    <div id="starting-area" class="col-xs-12 col-sm-12">
-      <div id="button-wrap">
-        <span ng-repeat="letter in game.word.wordArray track by $index">
-          <button ng-click="game.answerTry(letter)" type="button" class="btn btn-warning letter-tiles">
-            <p class="letters">{{ letter }}</p>
-          </button>
+    <div class="row">
+      <div class="col-sm-12">
+        <span class="pull-right">
         </span>
       </div>
     </div>
-  </div>
-  <div class="row clouds">
-    <div class="col-xs-2 col-sm-2">
-      <div id="streak-wrapper">
-        <p id="streak-count-label">STREAK</p>
-        <p id="streak-count">{{ game.streakCount }}</p>
-        <p id="streak-remaining">{{ game.nextLevel }}</p>
-      </div>
-    </div>
-    <div class="col-xs-8 col-sm-8">
-      <div>
-        <div ng-show="game.correct() === true"></div>
-        <div ng-show="game.correct() === false"></div>
-        <div id="answer-area">
-          <div ng-show="game.inputAnswer.length === 0">
-            <h3 id="answer-prompt">{{ game.answerPrompt }}</h3>
+    <div class="row">
+      <div class="col-xs-3 col-xs-offset-1 col-sm-3 col-sm-offset-1">
+        <div class="panel panel-default side-panels">
+          <div class="panel-heading">
+            <p class="panel-title stat-titles">Completed Words<span class="badge pull-right badges-count">{{ game.completedWords.length }}</span></p>
           </div>
-          <span ng-repeat="letter in game.inputAnswer track by $index" class="answer-letters">
-            <button ng-click="game.undo(letter)" type="button" class="btn btn-warning letter-tiles">
+          <div class="panel-body">
+            <ul id="completed-words" class="list-group">
+              <li ng-repeat="word in game.completedWords track by $index" class="list-group-item text-center words-done">{{ word }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-4 col-sm-4">
+        <img ng-src="{{ game.word.image }}" id="word-image" class="img-thumbnail img-responsive">
+      </div>
+      <div class="col-xs-3 col-sm-3">
+        <div class="panel panel-default side-panels">
+          <div class="panel-heading">
+            <p class="panel-title stat-titles">Word Streak<span class="badge pull-right badges-count">{{ game.streakCount }}</span></p>
+          </div>
+          <div class="panel-body">
+            <p id="level-title">Level: <strong>{{ game.level }}</strong></p>
+            <p id="level">{{ game.currentLevel }}</p>
+          </div>
+        </div>
+      </div>
+      <div id="starting-area" class="col-xs-12 col-sm-12">
+        <div id="button-wrap">
+          <span ng-repeat="letter in game.word.wordArray track by $index">
+            <button ng-click="game.answerTry(letter)" type="button" class="btn btn-warning letter-tiles">
               <p class="letters">{{ letter }}</p>
             </button>
           </span>
         </div>
       </div>
     </div>
-    <div class="col-xs-2 col-sm-2">
-      <div>
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+        <div ng-show="game.correct() === true"></div>
+        <div ng-show="game.correct() === false"></div>
+        <div class="well text-center">
+          <div ng-show="game.inputAnswer.length === 0" id="answer-area">
+            <h2 id="answer-prompt">{{ game.answerPrompt }}</h2>
+          </div>
+          <span ng-repeat="letter in game.inputAnswer track by $index" class="answer-letters">
+            <button ng-click="game.undo(letter)" type="button" class="btn btn-warning answer-letter-tiles">
+              <p class="letters">{{ letter }}</p>
+            </button>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-  <!-- Correct Modal -->
-  <div class="modal fade" id="correctModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div id="prompt-modal-body" class="modal-body">
-          <img class="verdict" src="/images/correct.png">
-          <div id="fun-fact">
-            <p id="the-word">{{ game.word.caps }}</p>
-            <p id="sound">{{ game.word.sound }}</p>
-            <p id="speech">{{ game.word.speech }}</p>
-            <p id="definition">{{ game.word.definition }}</p>
-          </div>
-          <div class="modal-button-options pull-right">
-            <button ng-click="game.playAgain(game.lastWord, true)" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
-            <button ng-click="home.loggedIn = false; game.playAgain(game.lastWord, true); game.quit()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+    <!-- Correct Modal -->
+    <div class="modal fade" id="correctModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div id="prompt-modal-body" class="modal-body">
+            <img class="verdict" src="/images/correct.png">
+            <div id="fun-fact">
+              <p id="next-level" class="pull-right">{{ game.nextLevel }}</p>
+              <p id="the-word">{{ game.word.caps }}</p>
+              <p id="sound">{{ game.word.sound }}</p>
+              <p id="speech">{{ game.word.speech }}</p>
+              <p id="definition">{{ game.word.definition }}</p>
+            </div>
+            <div class="modal-button-options pull-right">
+              <button ng-click="game.playAgain(game.lastWord, true)" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
+              <button ng-click="home.loggedIn = false; game.playAgain(game.lastWord, true); game.quit()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Incorrect Modal -->
-  <div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div id="prompt-modal-body" class="modal-body">
-          <img class="verdict" src="/images/oops.png">
-          <div class="modal-button-options pull-right">
-            <button ng-click="game.playAgain(game.lastWord, false)" type="button" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
-            <button ng-click="home.loggedIn = false; game.playAgain(game.lastWord, false); game.quit()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+    <!-- Incorrect Modal -->
+    <div class="modal fade" id="incorrectModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div id="prompt-modal-body" class="modal-body">
+            <img class="verdict" src="/images/oops.png">
+            <div class="modal-button-options pull-right">
+              <button ng-click="game.playAgain(game.lastWord, false)" type="button" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
+              <button ng-click="home.loggedIn = false; game.playAgain(game.lastWord, false); game.quit()" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Level Up Modal -->
+    <div class="modal fade" id="levelUpModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div id="prompt-modal-body" class="modal-body">
+            <img class="verdict" src="/images/level-up.png">
+            <div class="modal-button-options">
+              <button ng-click="game.playAgain(game.lastWord, true)" type="button" data-dismiss="modal" class="btn btn-default next-level center-block">Continue</button>
+            </div>
           </div>
         </div>
       </div>

@@ -7,19 +7,27 @@ app.$inject = ['$http'];
 function home($http) {
   var vm = this;
   vm.currentUser;
-  vm.greeting = "Hello there";
   vm.loggedIn = false;
+
+
+  // function getUser(user) {
+  //   if (user !== undefined) {
+  //     var login = $http.get('/game' + user);
+  //   } else {
+  //
+  //   }
+  // }
 
   //Query user
   vm.login = function(user) {
     if (user !== undefined) {
-      var sendLogin = $http.get('/check/login/' + user);
+      var sendLogin = $http.get('/login/' + user);
     } else {
-      var sendLogin = $http.get('/check/login/');
+      var sendLogin = $http.get('/login/');
     }
     sendLogin.then(function(response) {
-      if (response.data !== 'fail') {
-        if (response.data === true) {
+      if (response.data.verify !== 'fail') {
+        if (response.data.nameExists === true) {
           console.log("Please pick another name")
         }
         else if (response.data.verify === "pass") {
@@ -41,7 +49,7 @@ function home($http) {
     var added = $http.post('/user/', newUser);
     added.then(function(response) {
       vm.loggedIn = true;
-      vm.currentUser = response.data.user;
+      vm.currentUser = response.data.name;
     })
   }
 }

@@ -1,6 +1,5 @@
 body {
-  background: url(images/background.jpg) no-repeat fixed;
-  background-size: 100% 100%;
+  /*background: url(images/background.jpg) no-repeat center center fixed;*/
 }
 
 .letter-tiles {
@@ -9,7 +8,16 @@ body {
   color: white;
   font-family: Comic Sans MS;
   font-size: 30px;
-  margin: 45px 3px 0px 3px;
+  margin: 3px 3px 0px 3px;
+}
+
+.answer-letter-tiles {
+  width: 50px;
+  height: 50px;
+  color: white;
+  font-family: Comic Sans MS;
+  font-size: 30px;
+  margin: 6px 3px 0px 3px;
 }
 
 .letters {
@@ -21,34 +29,29 @@ body {
 }
 
 #starting-area {
+  height: 50px;
+}
+
+.well {
+  margin-top: 25px;
   height: 100px;
 }
 
 #word-image {
   display: block;
-  width: 300px;
   height: 300px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 30px;
 }
 
-#answer-area {
-  text-align: center;
-  /*height: 100px;*/
-  /*margin-top: 50px;*/
-}
-
 .answer-letters {
-  /*margin-top: -40px;*/
   display: inline-block;
 }
 
 #answer-prompt {
   color: lightgrey;
-  font-size: 33px;
   text-align: center;
-  /*margin-top: 13px;*/
 }
 
 .modal-content {
@@ -81,6 +84,17 @@ body {
 .submit {
   height: 70px;
   width: 135px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
+}
+
+.next-level {
+  height: 70px;
+  width: 155px;
   color: #FFF;
   font-size: 30px;
   font-weight: bold;
@@ -128,7 +142,7 @@ body {
 .play-btn {
   padding-top: 20px;
   height: 100px;
-  width: 300px;
+  width: 600px;
   color: #FFF;
   font-size: 40px;
   font-weight: bold;
@@ -140,7 +154,7 @@ body {
 .leaderboard-btn {
   margin-top: 20px;
   height: 100px;
-  width: 300px;
+  width: 600px;
   color: #FFF;
   font-size: 40px;
   font-weight: bold;
@@ -171,25 +185,6 @@ body {
   border-radius: 50px;
 }
 
-#streak-count {
-  /*margin-top: -20px;*/
-  font-size: 60px;
-}
-#streak-count-label {
-  font-size: 20px;
-}
-
-#streak-remaining {
-  /*margin-top: -25px;*/
-  font-size: 12px;
-}
-
-#streak-wrapper {
-  text-align: center;
-  /*margin-top: 150px;*/
-  height: 150px;
-}
-
 #login-prompt {
   position: absolute;
   text-align: center;
@@ -199,20 +194,28 @@ body {
   font-family: Comic Sans MS;
 }
 
-#completed-title {
-  text-align: center;
+.stat-titles {
+  color: lightgrey;
+  font-size: 20px;
+  font-family: Comic Sans MS;
+}
+
+.badges-count {
+  background-color: #FF6600 !important;
+}
+
+#completed-words {
+  max-height: 200px;
+  overflow-y:scroll;
+}
+
+#brand-large {
   font-size: 25px;
   font-family: Comic Sans MS;
 }
 
-#completed-words {
-  max-height: 300px;
-  overflow-y:scroll;
+#completed-words-wrapper {
   border-radius: 30px;
-}
-
-.clouds {
-  margin-top: 75px;
 }
 
 #fun-fact {
@@ -236,4 +239,43 @@ body {
 #definition {
   font-size: 20px;
   margin-top: 40px;
+}
+
+#login-name {
+  padding-right: 15px;;
+}
+
+.side-panels {
+  height: 300px;
+  border-radius: 30px !important;
+}
+
+.panel-heading {
+  border-top-left-radius: 30px !important;
+  border-top-right-radius: 30px !important;
+}
+
+#level {
+  margin-top: -30px;
+  text-align: center;
+  color: #6699FF;
+  font-size: 180px;
+  font-family: Comic Sans MS;
+}
+
+#next-level {
+  color: #6699FF;
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+#level-title {
+  position: absolute;
+  color: #FF6600;
+}
+
+.words-done {
+  font-size: 20px;
+  color: #6699FF;
+  font-family: Comic Sans MS;
 }
