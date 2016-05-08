@@ -9,15 +9,6 @@ function home($http) {
   vm.currentUser;
   vm.loggedIn = false;
 
-
-  // function getUser(user) {
-  //   if (user !== undefined) {
-  //     var login = $http.get('/game' + user);
-  //   } else {
-  //
-  //   }
-  // }
-
   //Query user
   vm.login = function(user) {
     if (user !== undefined) {

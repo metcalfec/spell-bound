@@ -11,6 +11,7 @@ var url = 'mongodb://metcalfec:calv1n@ds013212.mlab.com:13212/spell-bound'
 var array = [];
 var currentUser;
 
+
 app.use(express.static('./public/'));
 app.use(cookieParser());
 app.use(jsonParser);
@@ -78,19 +79,20 @@ app.post('/user', function(req, res) {
           name: titleCase(currentUser),
           streak: 0,
           completed: [],
-          level: 1
-        },
-        function(error, results) {
-          var newUser = {
-            name: titleCase(currentUser),
-            streak: 0,
-            completed: [],
-            level: 1
-          };
-          res.cookie('name', titleCase(currentUser));
-          res.json(newUser);
-          db.close();
-        });
+          level: 1,
+          score: 0
+        }, function(error, results) {
+      });
+      var newUser = {
+        name: titleCase(currentUser),
+        streak: 0,
+        completed: [],
+        level: 1,
+        score: 0
+      };
+      res.cookie('name', titleCase(currentUser));
+      res.json(newUser);
+      db.close();
     } else {
       res.sendStatus(500);
       console.log('Could not connect to the database: ' + error);
@@ -131,14 +133,17 @@ app.post('/continue', function(req, res) {
   var completedWords = [];
   var streakCount = 0;
   var currentLevel = 1;
+  var highScore = 0;
   myClient.connect(url, function(error, db) {
     if (!error) {
       var users = db.collection('users');
       users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
         if (results.length !== 0) {
+          console.log(results[0])
           completedWords = results[0].completed;
           streakCount = results[0].streak;
           currentLevel = results[0].level;
+          highScore = results[0].score;
         }
       });
       var word = db.collection('easy');
@@ -155,7 +160,8 @@ app.post('/continue', function(req, res) {
           definition: randomResults.definition,
           completed: completedWords,
           streak: streakCount,
-          level: currentLevel
+          level: currentLevel,
+          score: highScore
         };
         res.send(game);
         db.close();
@@ -172,30 +178,36 @@ app.post('/game', function(req, res) {
   var completedWords = req.body.completed;
   var streakCount = req.body.streak;
   var currentLevel = req.body.level;
+  var highScore = req.body.score;
   myClient.connect(url, function(error, db) {
     if (!error) {
       if (req.body.pass === true) {
         streakCount += 1;
-          completedWords.splice(0, 0, titleCase(req.body.word));
-          var updateUser = db.collection('users')
+        highScore += 1;
+        completedWords.splice(0, 0, titleCase(req.body.word));
+        var updateUser = db.collection('users')
+        updateUser.update(
+          {name: titleCase(currentUser)},
+          {$push: {completed: titleCase(req.body.word)}},
+          function(error, results) {
+        });
+        updateUser.update(
+          {name: titleCase(currentUser)},
+          {
+            $set: {
+              streak: streakCount,
+              score: highScore
+            }
+          }, function(error, results) {
+        });
+        if (req.body.streak % 10 === 0 && req.body.streak !== 0) {
+          currentLevel += 1;
           updateUser.update(
             {name: titleCase(currentUser)},
-            {$push: {completed: titleCase(req.body.word)}},
+            {$set: {level: currentLevel}},
             function(error, results) {
           });
-          updateUser.update(
-            {name: titleCase(currentUser)},
-            {$set: {streak: streakCount}},
-            function(error, results) {
-          });
-          if (req.body.streak % 10 === 0 && req.body.streak !== 0) {
-            currentLevel += 1;
-            updateUser.update(
-              {name: titleCase(currentUser)},
-              {$set: {level: currentLevel}},
-              function(error, results) {
-            });
-          }
+        }
         var theWord = db.collection('easy');
         theWord.find({}).toArray(function(error, results) {
           var randomResults = results[Math.floor(Math.random() * results.length)];
@@ -210,7 +222,8 @@ app.post('/game', function(req, res) {
             definition: randomResults.definition,
             streak: streakCount,
             completed: completedWords,
-            level: currentLevel
+            level: currentLevel,
+            score: highScore
           }
           res.send(game);
           db.close();
@@ -236,12 +249,46 @@ app.post('/game', function(req, res) {
             definition: results[0].definition,
             streak: streakCount,
             completed: completedWords,
-            level: currentLevel
+            level: currentLevel,
+            score: highScore
           }
           res.send(redo);
           db.close();
         });
       }
+    } else {
+      res.sendStatus(500);
+      console.log('Could not connect to the database: ' + error);
+    }
+  });
+});
+
+//High Scores
+app.get('/scores', function(req, res) {
+  myClient.connect(url, function(error, db) {
+    if (!error) {
+      var highScores = db.collection('users');
+      highScores.find({}).toArray(function(error, results) {
+        if (results.length !== 0) {
+          var highScoreArray = [];
+          for (var i = 0; i < results.length; i++) {
+            highScoreArray.push(
+              {
+                name: results[i].name,
+                score: results[i].score
+              }
+            )
+          }
+          highScoreArray.sort(function(a, b) {
+            return b.score - a.score;
+          });
+          res.send(highScoreArray);
+          db.close();
+        } else {
+          res.send()
+          db.close();
+        }
+      });
     } else {
       res.sendStatus(500);
       console.log('Could not connect to the database: ' + error);

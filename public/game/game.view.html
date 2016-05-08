@@ -2,6 +2,22 @@
   <div class="navbar-header">
     <a class="navbar-brand" id="brand-large" href="#/main">Spell-bound</a>
   </div>
+  <form class="navbar-form navbar-left">
+    <div class="form-group">
+      <div class="input-group">
+      <span class="input-group-addon">Difficulty</span>
+        <input id="difficulty-tracker" class="form-control" type="text" placeholder="{{ game.level }}" readonly>
+      </div>
+      <div class="input-group">
+      <span class="input-group-addon">Level</span>
+        <input id="level-tracker" class="form-control" type="text" placeholder="{{ game.currentLevel }}" readonly>
+      </div>
+      <div class="input-group">
+      <span class="input-group-addon">Streak</span>
+        <input id="streak-tracker" class="form-control" type="text" placeholder="{{ game.streakCount }}" readonly>
+      </div>
+    </div>
+  </form>
   <ul class="nav navbar-nav navbar-right">
     <li><p id="login-name" class="navbar-text">Playing as <strong>{{ home.currentUser }}</strong></p></li>
   </ul>
@@ -21,7 +37,7 @@
             <p class="panel-title stat-titles">Completed Words<span class="badge pull-right badges-count">{{ game.completedWords.length }}</span></p>
           </div>
           <div class="panel-body">
-            <ul id="completed-words" class="list-group">
+            <ul id="panel-stats" class="list-group">
               <li ng-repeat="word in game.completedWords track by $index" class="list-group-item text-center words-done">{{ word }}
               </li>
             </ul>
@@ -34,11 +50,13 @@
       <div class="col-xs-3 col-sm-3">
         <div class="panel panel-default side-panels">
           <div class="panel-heading">
-            <p class="panel-title stat-titles">Word Streak<span class="badge pull-right badges-count">{{ game.streakCount }}</span></p>
+            <p class="panel-title stat-titles">High Scores</p>
           </div>
           <div class="panel-body">
-            <p id="level-title">Level: <strong>{{ game.level }}</strong></p>
-            <p id="level">{{ game.currentLevel }}</p>
+            <ul id="panel-stats" class="list-group">
+              <li ng-repeat="data in game.highScoreArray track by $index" class="list-group-item words-done">{{ data.name }} <p class="pull-right">{{ data.score }}</p>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
