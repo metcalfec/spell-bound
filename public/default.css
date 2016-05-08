@@ -204,7 +204,7 @@ body {
   background-color: #FF6600 !important;
 }
 
-#completed-words {
+#panel-stats {
   max-height: 200px;
   overflow-y:scroll;
 }
@@ -212,10 +212,6 @@ body {
 #brand-large {
   font-size: 25px;
   font-family: Comic Sans MS;
-}
-
-#completed-words-wrapper {
-  border-radius: 30px;
 }
 
 #fun-fact {
@@ -255,27 +251,29 @@ body {
   border-top-right-radius: 30px !important;
 }
 
-#level {
-  margin-top: -30px;
-  text-align: center;
-  color: #6699FF;
-  font-size: 180px;
-  font-family: Comic Sans MS;
-}
-
 #next-level {
   color: #6699FF;
   margin-right: 15px;
   font-size: 20px;
 }
 
-#level-title {
-  position: absolute;
-  color: #FF6600;
-}
-
 .words-done {
   font-size: 20px;
   color: #6699FF;
   font-family: Comic Sans MS;
+}
+
+#difficulty-tracker {
+  width: 100px;
+  text-align: center;
+}
+
+#level-tracker {
+  width: 50px;
+  text-align: center;
+}
+
+#streak-tracker {
+  width: 50px;
+  text-align: center;
 }

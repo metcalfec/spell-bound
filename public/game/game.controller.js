@@ -13,6 +13,7 @@ function game($http) {
   vm.verdict;
   vm.streakCount = 0;
   vm.completedWords = [];
+  vm.highScore = 0;
   vm.currentUser;
   vm.nextLevel;
   vm.currentLevel = 1;
@@ -39,8 +40,10 @@ function game($http) {
       vm.streakCount = response.data.streak;
       vm.completedWords = response.data.completed;
       vm.currentLevel = response.data.level;
+      vm.highScore = response.data.score;
+      vm.highScoreArray = [];
       streak(response.data.streak);
-      console.log(vm.word)
+      getHighScores();
     })
   }
 
@@ -49,10 +52,10 @@ function game($http) {
     var gameStats = {};
     gameStats.word = word;
     gameStats.pass = vm.verdict;
-    gameStats.streak = vm.streakCount
+    gameStats.streak = vm.streakCount;
     gameStats.completed = vm.completedWords;
     gameStats.level = vm.currentLevel;
-    console.log(vm.streakCount)
+    gameStats.score = vm.highScore;
     var theGame = $http.post('/game/', gameStats);
     theGame.then(function(response) {
       vm.word = response.data;
@@ -61,8 +64,16 @@ function game($http) {
       vm.streakCount = response.data.streak;
       vm.completedWords = response.data.completed;
       vm.currentLevel = response.data.level;
+      vm.highScore = response.data.score;
       streak(response.data.streak);
-      console.log(vm.word)
+      getHighScores();
+    })
+  }
+
+  function getHighScores() {
+    var scoreboard = $http.get('/scores/');
+    scoreboard.then(function(response) {
+      vm.highScoreArray = response.data;
     })
   }
 
