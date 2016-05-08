@@ -8,7 +8,7 @@ body {
   color: white;
   font-family: Comic Sans MS;
   font-size: 30px;
-  margin: 45px 3px 0px 3px;
+  margin: 3px 3px 0px 3px;
 }
 
 .answer-letter-tiles {
@@ -29,21 +29,20 @@ body {
 }
 
 #starting-area {
+  height: 50px;
+}
+
+.well {
+  margin-top: 25px;
   height: 100px;
 }
 
 #word-image {
   display: block;
-  height: 400px;
+  height: 300px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 30px;
-}
-
-#answer-area {
-  text-align: center;
-  height: 100px;
-  margin-top: 50px;
 }
 
 .answer-letters {
@@ -52,7 +51,6 @@ body {
 
 #answer-prompt {
   color: lightgrey;
-  font-size: 33px;
   text-align: center;
 }
 
@@ -86,6 +84,17 @@ body {
 .submit {
   height: 70px;
   width: 135px;
+  color: #FFF;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Comic Sans MS;
+  background-color: #FF6600;
+  border-radius: 20px;
+}
+
+.next-level {
+  height: 70px;
+  width: 155px;
   color: #FFF;
   font-size: 30px;
   font-weight: bold;
@@ -133,7 +142,7 @@ body {
 .play-btn {
   padding-top: 20px;
   height: 100px;
-  width: 300px;
+  width: 600px;
   color: #FFF;
   font-size: 40px;
   font-weight: bold;
@@ -145,7 +154,7 @@ body {
 .leaderboard-btn {
   margin-top: 20px;
   height: 100px;
-  width: 300px;
+  width: 600px;
   color: #FFF;
   font-size: 40px;
   font-weight: bold;
@@ -185,17 +194,18 @@ body {
   font-family: Comic Sans MS;
 }
 
-#completed-title {
+.stat-titles {
+  color: lightgrey;
   font-size: 20px;
   font-family: Comic Sans MS;
 }
-#completed-length {
-  background-color: #6699FF;
+
+.badges-count {
+  background-color: #FF6600 !important;
 }
 
-
 #completed-words {
-  max-height: px;
+  max-height: 200px;
   overflow-y:scroll;
 }
 
@@ -236,18 +246,36 @@ body {
 }
 
 .side-panels {
-  height: 400px;
+  height: 300px;
+  border-radius: 30px !important;
+}
+
+.panel-heading {
+  border-top-left-radius: 30px !important;
+  border-top-right-radius: 30px !important;
 }
 
 #level {
+  margin-top: -30px;
   text-align: center;
-  font-size: 200px;
+  color: #6699FF;
+  font-size: 180px;
   font-family: Comic Sans MS;
 }
 
 #next-level {
-  text-align: center;
-  font-size: 15px;
+  color: #6699FF;
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+#level-title {
+  position: absolute;
+  color: #FF6600;
+}
+
+.words-done {
+  font-size: 20px;
+  color: #6699FF;
   font-family: Comic Sans MS;
-  color: lightgrey;
 }

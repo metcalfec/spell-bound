@@ -9,32 +9,24 @@ var myClient = mongo.MongoClient;
 var url = 'mongodb://metcalfec:calv1n@ds013212.mlab.com:13212/spell-bound'
 
 var array = [];
-var streakCount = 0;
 var currentUser;
-var completedWords = [];
 
 app.use(express.static('./public/'));
 app.use(cookieParser());
 app.use(jsonParser);
 
 //Login check
-app.get('/check/login', function(req, res) {
-  streakCount = 0;
-  completedWords = [];
+app.get('/login', function(req, res) {
+  currentUser = req.cookies.name;
   if (req.cookies.name !== undefined) {
     myClient.connect(url, function(error, db) {
       if (!error) {
-        currentUser = req.cookies.name;
         var users = db.collection('users');
         users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
           if (results.length !== 0) {
-            streakCount = results[0].streak;
-            completedWords = results[0].completed;
             var credentials = {
               verify: 'pass',
-              user: currentUser,
-              streak: streakCount,
-              completed: completedWords
+              user: currentUser
             };
             res.send(credentials);
             db.close();
@@ -49,24 +41,22 @@ app.get('/check/login', function(req, res) {
       }
     });
   } else {
-    res.send('fail');
+    res.send({verify: 'fail'});
   }
 });
 
 //Check if user exists in db
-app.get('/check/login/:user', function(req, res) {
-  streakCount = 0;
-  completedWords = [];
+app.get('/login/:user', function(req, res) {
+  currentUser = req.params.user;
   myClient.connect(url, function(error, db) {
     if (!error) {
-      currentUser = req.params.user;
       var users = db.collection('users');
       users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
         if (results.length !== 0) {
-          res.send(true)
+          res.send({nameExists: true})
           db.close();
         } else {
-          res.send(false)
+          res.send({nameExists: false})
           db.close();
         }
       });
@@ -79,27 +69,26 @@ app.get('/check/login/:user', function(req, res) {
 
 //Add new user to db
 app.post('/user', function(req, res) {
-  streakCount = 0;
-  completedWords = [];
+  currentUser = req.body.name;
   myClient.connect(url, function(error, db) {
     if (!error) {
-      currentUser = req.body.name;
       var users = db.collection('users');
       users.insert(
         {
           name: titleCase(currentUser),
           streak: 0,
-          completed: []
+          completed: [],
+          level: 1
         },
         function(error, results) {
-          var userInfo = {
-            // found: true,
-            user: titleCase(currentUser),
+          var newUser = {
+            name: titleCase(currentUser),
             streak: 0,
-            completed: []
+            completed: [],
+            level: 1
           };
           res.cookie('name', titleCase(currentUser));
-          res.json(userInfo);
+          res.json(newUser);
           db.close();
         });
     } else {
@@ -109,10 +98,8 @@ app.post('/user', function(req, res) {
   });
 });
 
-//Initial game
-app.get('/game', function(req, res) {
-  streakCount = 0;
-  completedWords = [];
+//Start game no cookies
+app.get('/start', function(req, res) {
   myClient.connect(url, function(error, db) {
     if (!error) {
       var word = db.collection('easy');
@@ -127,8 +114,6 @@ app.get('/game', function(req, res) {
           sound: randomResults.sound,
           speech: randomResults.speech,
           definition: randomResults.definition,
-          streak: 0,
-          completed: []
         }
         res.send(game);
         db.close();
@@ -141,17 +126,19 @@ app.get('/game', function(req, res) {
 });
 
 //Return to game if cookies are present
-app.post('/game/remembered', function(req, res) {
-  streakCount = 0;
-  completedWords = [];
+app.post('/continue', function(req, res) {
+  currentUser = req.body.name;
+  var completedWords = [];
+  var streakCount = 0;
+  var currentLevel = 1;
   myClient.connect(url, function(error, db) {
     if (!error) {
-      currentUser = req.body.name;
       var users = db.collection('users');
       users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
         if (results.length !== 0) {
-          streakCount = results[0].streak;
           completedWords = results[0].completed;
+          streakCount = results[0].streak;
+          currentLevel = results[0].level;
         }
       });
       var word = db.collection('easy');
@@ -166,9 +153,10 @@ app.post('/game/remembered', function(req, res) {
           sound: randomResults.sound,
           speech: randomResults.speech,
           definition: randomResults.definition,
+          completed: completedWords,
           streak: streakCount,
-          completed: completedWords
-        }
+          level: currentLevel
+        };
         res.send(game);
         db.close();
       });
@@ -181,22 +169,33 @@ app.post('/game/remembered', function(req, res) {
 
 //Update db and generate new word
 app.post('/game', function(req, res) {
+  var completedWords = req.body.completed;
+  var streakCount = req.body.streak;
+  var currentLevel = req.body.level;
   myClient.connect(url, function(error, db) {
     if (!error) {
       if (req.body.pass === true) {
         streakCount += 1;
-        completedWords.splice(0, 0, titleCase(req.body.word));
-        var updateUser = db.collection('users')
-        updateUser.update(
-          {name: titleCase(currentUser)},
-          {$push: {completed: titleCase(req.body.word)}},
-          function(error, results) {
-        });
-        updateUser.update(
-          {name: titleCase(currentUser)},
-          {$set: {streak: streakCount}},
-          function(error, results) {
-        });
+          completedWords.splice(0, 0, titleCase(req.body.word));
+          var updateUser = db.collection('users')
+          updateUser.update(
+            {name: titleCase(currentUser)},
+            {$push: {completed: titleCase(req.body.word)}},
+            function(error, results) {
+          });
+          updateUser.update(
+            {name: titleCase(currentUser)},
+            {$set: {streak: streakCount}},
+            function(error, results) {
+          });
+          if (req.body.streak % 10 === 0 && req.body.streak !== 0) {
+            currentLevel += 1;
+            updateUser.update(
+              {name: titleCase(currentUser)},
+              {$set: {level: currentLevel}},
+              function(error, results) {
+            });
+          }
         var theWord = db.collection('easy');
         theWord.find({}).toArray(function(error, results) {
           var randomResults = results[Math.floor(Math.random() * results.length)];
@@ -210,7 +209,8 @@ app.post('/game', function(req, res) {
             speech: randomResults.speech,
             definition: randomResults.definition,
             streak: streakCount,
-            completed: completedWords
+            completed: completedWords,
+            level: currentLevel
           }
           res.send(game);
           db.close();
@@ -235,7 +235,8 @@ app.post('/game', function(req, res) {
             speech: results[0].speech,
             definition: results[0].definition,
             streak: streakCount,
-            completed: completedWords
+            completed: completedWords,
+            level: currentLevel
           }
           res.send(redo);
           db.close();

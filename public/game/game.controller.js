@@ -14,40 +14,45 @@ function game($http) {
   vm.streakCount = 0;
   vm.completedWords = [];
   vm.currentUser;
-  vm.levelCount = 1;
+  vm.nextLevel;
+  vm.currentLevel = 1;
+  vm.level = "Easy";
+
   activate();
 
   function activate() {
     startGame();
   }
 
-  //Initial game
+  //Initiate game
   function startGame() {
     var cookie = {name: (document.cookie.split('=').pop())};
-    if (cookie !== undefined) {
-      var newWord = $http.post('/game/remembered/', cookie);
+    if (cookie.name !== undefined) {
+      var newWord = $http.post('/continue/', cookie);
     } else {
-      vm.streakCount = 0;
-      vm.completedWords = [];
-      var newWord = $http.get('/game/');
+      var newWord = $http.get('/start/');
     }
     newWord.then(function(response) {
       vm.word = response.data;
-      vm.lastWord = vm.word.word;
+      vm.lastWord = response.data.word;
       vm.letters = response.data.wordArray;
       vm.streakCount = response.data.streak;
       vm.completedWords = response.data.completed;
+      vm.currentLevel = response.data.level;
       streak(response.data.streak);
+      console.log(vm.word)
     })
   }
 
-  //New word
+  // //New word
   function getGame(word) {
     var gameStats = {};
     gameStats.word = word;
     gameStats.pass = vm.verdict;
-    gameStats.streak = vm.streak;
+    gameStats.streak = vm.streakCount
     gameStats.completed = vm.completedWords;
+    gameStats.level = vm.currentLevel;
+    console.log(vm.streakCount)
     var theGame = $http.post('/game/', gameStats);
     theGame.then(function(response) {
       vm.word = response.data;
@@ -55,7 +60,9 @@ function game($http) {
       vm.letters = response.data.wordArray;
       vm.streakCount = response.data.streak;
       vm.completedWords = response.data.completed;
+      vm.currentLevel = response.data.level;
       streak(response.data.streak);
+      console.log(vm.word)
     })
   }
 
@@ -101,12 +108,18 @@ function game($http) {
         while (x.length > 1) {
           x.pop(0);
         }
-        vm.nextLevel = (10 - x[0]) + " until next level";
+        vm.nextLevel = (10 - x[0]) + " more until next level";
       } else {
-        vm.nextLevel = (10 - number) + " until next level";
+        vm.nextLevel = (10 - number) + " more until next level";
       }
     } else {
-      vm.nextLevel = 10 + " until next level";
+      if (number !== 0) {
+        // vm.currentLevel += 1;
+        vm.nextLevel = 10 + " more until next level";
+        $('#levelUpModal').modal('show');
+      } else {
+        vm.nextLevel = 10 + " more until next level";
+      }
     }
   }
 }
