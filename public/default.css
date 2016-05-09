@@ -1,5 +1,18 @@
 body {
-  /*background: url(images/background.jpg) no-repeat center center fixed;*/
+  position: relative;
+  background: url(images/landing-opac.jpg);
+}
+
+#intro {
+  font-family: Comic Sans MS;
+  color: white;
+  height: 768px;
+  background-color: rgba(255, 102, 0, 0.5);
+}
+
+#intro-title {
+  font-size: 120px;
+  padding-bottom: 20px;
 }
 
 .letter-tiles {
@@ -50,6 +63,7 @@ body {
 }
 
 #answer-prompt {
+  font-family: Comic Sans MS;
   color: lightgrey;
   text-align: center;
 }
@@ -118,7 +132,7 @@ body {
 .main {
   margin-right: 10px;
   height: 70px;
-  width: 110px;
+  width: 200px;
   color: #FFF;
   font-size: 30px;
   font-weight: bold;
@@ -140,18 +154,18 @@ body {
 }
 
 .play-btn {
-  padding-top: 20px;
-  height: 100px;
-  width: 600px;
+  height: 70px;
+  width: 200px;
   color: #FFF;
   font-size: 40px;
   font-weight: bold;
   font-family: Comic Sans MS;
-  background-color: #FF6600;
-  border-radius: 40px;
+  background-color: #6699FF;
+  border-radius: 20px;
 }
 
 .leaderboard-btn {
+  padding-top: 20px;
   margin-top: 20px;
   height: 100px;
   width: 600px;
@@ -195,7 +209,7 @@ body {
 }
 
 .stat-titles {
-  color: lightgrey;
+  color: white;
   font-size: 20px;
   font-family: Comic Sans MS;
 }
@@ -210,6 +224,7 @@ body {
 }
 
 #brand-large {
+  color: white;
   font-size: 25px;
   font-family: Comic Sans MS;
 }
@@ -238,6 +253,9 @@ body {
 }
 
 #login-name {
+  font-family: Comic Sans MS;
+  color: white;
+  font-size: 20px;
   padding-right: 15px;;
 }
 
@@ -247,6 +265,7 @@ body {
 }
 
 .panel-heading {
+  background-color: rgba(255, 102, 0, 0.5) !important;
   border-top-left-radius: 30px !important;
   border-top-right-radius: 30px !important;
 }
@@ -264,16 +283,31 @@ body {
 }
 
 #difficulty-tracker {
+  font-family: Comic Sans MS;
   width: 100px;
   text-align: center;
 }
 
 #level-tracker {
+  font-family: Comic Sans MS;
   width: 50px;
   text-align: center;
 }
 
 #streak-tracker {
+  font-family: Comic Sans MS;
   width: 50px;
   text-align: center;
+}
+
+.navbar {
+  background-color: rgba(102, 153, 255, 0.9);
+}
+
+.navbar-header {
+  color: white;
+}
+
+.input-group-addon {
+  font-family: Comic Sans MS !important;
 }

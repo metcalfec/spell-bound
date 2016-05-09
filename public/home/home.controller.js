@@ -7,11 +7,11 @@ app.$inject = ['$http'];
 function home($http) {
   var vm = this;
   vm.currentUser;
-  vm.loggedIn = false;
+  vm.gameboard = false;
 
   //Query user
   vm.login = function(user) {
-    if (user !== undefined) {
+    if (user) {
       var sendLogin = $http.get('/login/' + user);
     } else {
       var sendLogin = $http.get('/login/');
@@ -19,10 +19,10 @@ function home($http) {
     sendLogin.then(function(response) {
       if (response.data.verify !== 'fail') {
         if (response.data.nameExists === true) {
-          console.log("Please pick another name")
+          $('#existsModal').modal('show');
         }
         else if (response.data.verify === "pass") {
-          vm.loggedIn = true;
+          vm.gameboard = true;
           vm.currentUser = response.data.user;
         } else {
           vm.addUser(user);
@@ -39,7 +39,7 @@ function home($http) {
     newUser.name = user;
     var added = $http.post('/user/', newUser);
     added.then(function(response) {
-      vm.loggedIn = true;
+      vm.gameboard = true;
       vm.currentUser = response.data.name;
     })
   }
