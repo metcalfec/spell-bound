@@ -139,7 +139,6 @@ app.post('/continue', function(req, res) {
       var users = db.collection('users');
       users.find({name: titleCase(currentUser)}).toArray(function(error, results) {
         if (results.length !== 0) {
-          console.log(results[0])
           completedWords = results[0].completed;
           streakCount = results[0].streak;
           currentLevel = results[0].level;
@@ -228,7 +227,8 @@ app.post('/game', function(req, res) {
           res.send(game);
           db.close();
         });
-      } else {
+      }
+      else if (req.body.pass === false) {
         streakCount = 0;
         var updateUser = db.collection('users')
         updateUser.update(
@@ -253,6 +253,34 @@ app.post('/game', function(req, res) {
             score: highScore
           }
           res.send(redo);
+          db.close();
+        });
+      } else {
+        streakCount = 0;
+        var updateUser = db.collection('users')
+        updateUser.update(
+          {name: titleCase(currentUser)},
+          {$set: {streak: streakCount}},
+          function(error, results) {
+        });
+        var theWord = db.collection('easy');
+        theWord.find({}).toArray(function(error, results) {
+          var randomResults = results[Math.floor(Math.random() * results.length)];
+          letterArray(randomResults.word.toUpperCase());
+          var game = {
+            word: randomResults.word.toUpperCase(),
+            wordArray: array,
+            image: randomResults.image,
+            caps: randomResults.word.toUpperCase(),
+            sound: randomResults.sound,
+            speech: randomResults.speech,
+            definition: randomResults.definition,
+            streak: streakCount,
+            completed: completedWords,
+            level: currentLevel,
+            score: highScore
+          }
+          res.send(game);
           db.close();
         });
       }

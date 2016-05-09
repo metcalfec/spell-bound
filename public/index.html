@@ -9,12 +9,15 @@
 </head>
 <body ng-app="spellBound">
   <div ng-controller="homeController as home">
-    <div ng-show="home.loggedIn">
+    <div ng-show="home.gameboard">
       <div ng-view></div>
     </div>
-    <div ng-hide="home.loggedIn" class="main-btns">
-      <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">Play</a>
-      <button type="button" class="btn btn-default leaderboard-btn center-block">Leaderboard</button>
+    <div ng-hide="home.gameboard">
+      <div id="intro" class="jumbotron text-center">
+        <h1 id="intro-title"><strong>Spell-Bound</strong></h1>
+        <p>Build your vocabulary through a fun spelling game</p>
+        <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">Play Now</a>
+      </div>
     </div>
     <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
@@ -34,13 +37,13 @@
       </div>
     </div>
     <!-- Name Exists Modal-->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="existsModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div id="prompt-modal-body" class="modal-body">
             <img class="verdict" src="/images/player.png">
             <div id="login-prompt">
-              <h3>Please enter your first name to begin playing</h3>
+              <h3>That name is already taken. Please enter a different name.</h3>
             </div>
             <input ng-model="home.name" id="name-input" class="form-control" placeholder="Enter your name...">
             <div class="modal-button-options">
@@ -57,6 +60,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.4/angular-route.min.js"></script>
   <script src="app.js"></script>
   <script src="game/game.controller.js"></script>
+  <script src="game/score.controller.js"></script>
   <script src="home/home.controller.js"></script>
 </body>
 </html>

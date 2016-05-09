@@ -28,7 +28,7 @@ function game($http) {
   //Initiate game
   function startGame() {
     var cookie = {name: (document.cookie.split('=').pop())};
-    if (cookie.name !== undefined) {
+    if (cookie.name) {
       var newWord = $http.post('/continue/', cookie);
     } else {
       var newWord = $http.get('/start/');
@@ -70,6 +70,7 @@ function game($http) {
     })
   }
 
+  //Scoreboard
   function getHighScores() {
     var scoreboard = $http.get('/scores/');
     scoreboard.then(function(response) {
@@ -111,26 +112,33 @@ function game($http) {
     getGame(word);
   }
 
-  //Streak counter
+  //Level progress
   function streak(number) {
     if (number % 10 !== 0) {
       if (number > 10) {
         var x = number.toString().split('');
         while (x.length > 1) {
-          x.pop(0);
+          x.shift();
         }
-        vm.nextLevel = (10 - x[0]) + " more until next level";
+        vm.nextLevel = (9 - x[0]) + " more until next level";
       } else {
-        vm.nextLevel = (10 - number) + " more until next level";
+        vm.nextLevel = (9 - number) + " more until next level";
       }
     } else {
       if (number !== 0) {
-        // vm.currentLevel += 1;
-        vm.nextLevel = 10 + " more until next level";
+        vm.nextLevel = 9 + " more until next level";
         $('#levelUpModal').modal('show');
       } else {
-        vm.nextLevel = 10 + " more until next level";
+        vm.nextLevel = 9 + " more until next level";
       }
     }
   }
+
+  //Prevent spacebar input
+  $(function() {
+    $('#name-input').on('keypress', function(e) {
+      if (e.which == 32)
+      return false;
+    });
+  });
 }
