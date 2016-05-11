@@ -18,7 +18,6 @@ app.use(jsonParser);
 //Login check
 app.get('/login', function(req, res) {
   currentUser = req.cookies.name;
-  console.log(currentUser)
   if (req.cookies.name !== undefined) {
     myClient.connect(url, function(error, db) {
       if (!error) {
