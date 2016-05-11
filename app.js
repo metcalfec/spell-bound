@@ -18,6 +18,7 @@ app.use(jsonParser);
 //Login check
 app.get('/login', function(req, res) {
   currentUser = req.cookies.name;
+  console.log(currentUser)
   if (req.cookies.name !== undefined) {
     myClient.connect(url, function(error, db) {
       if (!error) {
@@ -31,7 +32,22 @@ app.get('/login', function(req, res) {
             res.send(credentials);
             db.close();
           } else {
-            res.send("Oops")
+            users.insert(
+              {
+                name: titleCase(currentUser),
+                streak: 0,
+                completed: [],
+                level: 1,
+                score: 0,
+                difficulty: 'Easy'
+              }, function(error, results) {
+            });
+            var credentials = {
+              verify: 'pass',
+              user: currentUser
+            };
+            res.cookie('name', titleCase(currentUser));
+            res.send(credentials);
             db.close();
           }
         });
