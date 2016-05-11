@@ -166,8 +166,8 @@ app.post('/continue', function(req, res) {
           currentDifficulty = results[0].difficulty;
         }
       });
-      var word = db.collection('easy');
-      word.find({}).toArray(function(error, results) {
+      var easyWord = db.collection('easy');
+      easyWord.find({}).toArray(function(error, results) {
         if (currentDifficulty === 'Easy') {
           var randomResults = results[Math.floor(Math.random() * results.length)];
           letterArray(randomResults.word.toUpperCase());
@@ -187,9 +187,30 @@ app.post('/continue', function(req, res) {
           db.close();
         }
       });
-      var med = db.collection('medium');
-      med.find({}).toArray(function(error, results) {
+      var medWord = db.collection('medium');
+      medWord.find({}).toArray(function(error, results) {
         if (currentDifficulty === 'Medium') {
+          var randomResults = results[Math.floor(Math.random() * results.length)];
+          letterArray(randomResults.word.toUpperCase());
+          var game = {
+            word: randomResults.word.toUpperCase(),
+            wordArray: array,
+            image: randomResults.image,
+            speech: randomResults.speech,
+            definition: randomResults.definition,
+            completed: completedWords,
+            streak: streakCount,
+            level: currentLevel,
+            score: highScore,
+            difficulty: currentDifficulty
+          };
+          res.send(game);
+          db.close();
+        }
+      });
+      var hardWord = db.collection('hard');
+      hardWord.find({}).toArray(function(error, results) {
+        if (currentDifficulty === 'Hard') {
           var randomResults = results[Math.floor(Math.random() * results.length)];
           letterArray(randomResults.word.toUpperCase());
           var game = {
@@ -244,7 +265,6 @@ app.post('/game', function(req, res) {
           }, function(error, results) {
         });
         if (streakCount % 10 === 0 && streakCount !== 0) {
-          console.log(streakCount)
           currentLevel += 1;
           switch (currentLevel) {
             case 2:
@@ -260,23 +280,25 @@ app.post('/game', function(req, res) {
               });
               break;
             case 3:
+              currentDifficulty = 'Hard';
               updateUser.update(
                 {name: titleCase(currentUser)},
                 {
                   $set: {
                     level: currentLevel,
-                    difficulty: 'Medium'
+                    difficulty: 'Hard'
                   }
                 }, function(error, results) {
               });
               break;
             default:
+              currentDifficulty = 'Hard';
               updateUser.update(
                 {name: titleCase(currentUser)},
                 {
                   $set: {
                     level: currentLevel,
-                    difficulty: 'Medium'
+                    difficulty: 'Hard'
                   }
                 }, function(error, results) {
               });
@@ -307,6 +329,27 @@ app.post('/game', function(req, res) {
         var medWord = db.collection('medium');
         medWord.find({}).toArray(function(error, results) {
           if (currentDifficulty === 'Medium') {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              speech: randomResults.speech,
+              definition: randomResults.definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
+        });
+        var hardWord = db.collection('hard');
+        hardWord.find({}).toArray(function(error, results) {
+          if (currentDifficulty === 'Hard') {
             var randomResults = results[Math.floor(Math.random() * results.length)];
             letterArray(randomResults.word.toUpperCase());
             var game = {
@@ -375,6 +418,27 @@ app.post('/game', function(req, res) {
             db.close();
           }
         });
+        var hardWord = db.collection('hard');
+        hardWord.find({word: titleCase(req.body.word)}).toArray(function(error, results) {
+          if (currentDifficulty === 'Hard') {
+            console.log(results)
+            letterArray(results[0].word.toUpperCase());
+            var game = {
+              word: results[0].word.toUpperCase(),
+              wordArray: array,
+              image: results[0].image,
+              speech: results[0].speech,
+              definition: results[0].definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
+        });
       } else {
         streakCount = 0;
         var updateUser = db.collection('users')
@@ -407,6 +471,27 @@ app.post('/game', function(req, res) {
         var medWord = db.collection('medium');
         medWord.find({}).toArray(function(error, results) {
           if (currentDifficulty === 'Medium') {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              speech: randomResults.speech,
+              definition: randomResults.definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
+        });
+        var hardWord = db.collection('hard');
+        hardWord.find({}).toArray(function(error, results) {
+          if (currentDifficulty === 'Hard') {
             var randomResults = results[Math.floor(Math.random() * results.length)];
             letterArray(randomResults.word.toUpperCase());
             var game = {
