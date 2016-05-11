@@ -6,18 +6,10 @@ app.$inject = ['$http'];
 
 function game($http) {
   var vm = this;
-  vm.message = "New Game";
   vm.answerPrompt = "Click the letters to begin.";
   vm.inputAnswer = [];
   vm.lastWord;
   vm.verdict;
-  vm.streakCount = 0;
-  vm.completedWords = [];
-  vm.highScore = 0;
-  vm.currentUser;
-  vm.nextLevel;
-  vm.currentLevel = 1;
-  vm.level = "Easy";
 
   activate();
 
@@ -42,6 +34,7 @@ function game($http) {
       vm.currentLevel = response.data.level;
       vm.highScore = response.data.score;
       vm.highScoreArray = [];
+      vm.difficulty = response.data.difficulty;
       streak(response.data.streak);
       getHighScores();
     })
@@ -56,6 +49,7 @@ function game($http) {
     gameStats.completed = vm.completedWords;
     gameStats.level = vm.currentLevel;
     gameStats.score = vm.highScore;
+    gameStats.difficulty = vm.difficulty;
     var theGame = $http.post('/game/', gameStats);
     theGame.then(function(response) {
       vm.word = response.data;
@@ -65,7 +59,9 @@ function game($http) {
       vm.completedWords = response.data.completed;
       vm.currentLevel = response.data.level;
       vm.highScore = response.data.score;
-      streak(response.data.streak);
+      vm.difficulty = response.data.difficulty;
+      levelUp(vm.streakCount);
+      streak(vm.streakCount);
       getHighScores();
     })
   }
@@ -106,9 +102,6 @@ function game($http) {
   vm.playAgain = function(word, verdict) {
     vm.inputAnswer = [];
     vm.verdict = verdict;
-    if (verdict === false) {
-      vm.streakCount = 0;
-    }
     getGame(word);
   }
 
@@ -120,17 +113,44 @@ function game($http) {
         while (x.length > 1) {
           x.shift();
         }
-        vm.nextLevel = (9 - x[0]) + " more until next level";
-      } else {
+        if (x[0] != 9) {
+          vm.nextLevel = (9 - x[0]) + " more until next level";
+        } else {
+          vm.nextLevel = "LEVEL UP!";
+        }
+      }
+      else if (number < 10 && number !== 9) {
         vm.nextLevel = (9 - number) + " more until next level";
+      } else {
+        vm.nextLevel = "LEVEL UP!";
       }
     } else {
-      if (number !== 0) {
-        vm.nextLevel = 9 + " more until next level";
-        $('#levelUpModal').modal('show');
-      } else {
-        vm.nextLevel = 9 + " more until next level";
-      }
+      vm.nextLevel = 9 + " more until next level";
+    }
+  }
+
+  function levelUp(count) {
+    if (count % 10 === 0 && count !== 0) {
+      $('#level-tracker').popover('show');
+      $('#level-tracker').on('shown.bs.popover', function() {
+        setTimeout(function() {
+          $('#level-tracker').popover('hide');
+          $('#difficulty-tracker').popover('show');
+          $('#difficulty-tracker').on('shown.bs.popover', function() {
+            setTimeout(function() {
+              $('#difficulty-tracker').popover('hide');
+            }, 5000);
+          });
+        }, 3000);
+      });
+    }
+    else if (count === 1) {
+      $('#streak-tracker').popover('show');
+      $('#streak-tracker').on('shown.bs.popover', function() {
+        setTimeout(function() {
+          $('#streak-tracker').popover('hide');
+        }, 5000);
+      });
     }
   }
 

@@ -14,13 +14,13 @@
     </div>
     <div ng-hide="home.gameboard">
       <div id="intro" class="jumbotron text-center">
-        <h1 id="intro-title"><strong>Spell-Bound</strong></h1>
-        <p>Build your vocabulary through a fun spelling game</p>
-        <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">Play Now</a>
+        <img id="intro-title" src="images/spell-bound.png">
+        <p class="intro-text">Build your vocabulary through a fun spelling game</p>
+        <a ng-click="home.login()" href="#/game" class="btn btn-default play-btn center-block">PLAY</a>
       </div>
     </div>
     <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" data-backdrop="static">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div id="prompt-modal-body" class="modal-body">
@@ -37,7 +37,7 @@
       </div>
     </div>
     <!-- Name Exists Modal-->
-    <div class="modal fade" id="existsModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="existsModal" tabindex="-1" role="dialog" data-backdrop="static">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div id="prompt-modal-body" class="modal-body">
@@ -60,7 +60,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.4/angular-route.min.js"></script>
   <script src="app.js"></script>
   <script src="game/game.controller.js"></script>
-  <script src="game/score.controller.js"></script>
   <script src="home/home.controller.js"></script>
 </body>
 </html>
