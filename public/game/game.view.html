@@ -6,15 +6,15 @@
     <div class="form-group">
       <div class="input-group">
       <span class="input-group-addon">Difficulty</span>
-        <input id="difficulty-tracker" class="form-control" type="text" placeholder="{{ game.level }}" readonly>
+        <input id="difficulty-tracker" class="form-control" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Difficulty has increased. Words are now one to three letters longer." type="text" placeholder="{{ game.difficulty }}" readonly>
       </div>
       <div class="input-group">
       <span class="input-group-addon">Level</span>
-        <input id="level-tracker" class="form-control" type="text" placeholder="{{ game.currentLevel }}" readonly>
+        <input id="level-tracker" class="form-control" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Level Up!" type="text" placeholder="{{ game.currentLevel }}" readonly>
       </div>
       <div class="input-group">
       <span class="input-group-addon">Streak</span>
-        <input id="streak-tracker" class="form-control" type="text" placeholder="{{ game.streakCount }}" readonly>
+        <input id="streak-tracker" class="form-control" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Solve ten words in a row to level up. The word difficulty will increase at each level." type="text" placeholder="{{ game.streakCount }}" readonly>
       </div>
     </div>
   </form>
@@ -87,13 +87,13 @@
           <img class="verdict" src="/images/correct.png">
           <div id="fun-fact">
             <p id="next-level" class="pull-right">{{ game.nextLevel }}</p>
-            <p id="the-word">{{ game.word.caps }}</p>
+            <p id="the-word">{{ game.lastWord.toUpperCase() }}</p>
             <p id="speech">{{ game.word.speech }}</p>
             <p id="definition">{{ game.word.definition }}</p>
           </div>
           <div class="modal-button-options pull-right">
-            <button ng-click="game.playAgain(game.lastWord, true)" type="button" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
-            <button ng-click="home.gameboard = false; game.playAgain(game.lastWord, true)" type="button" data-dismiss="modal" class="btn btn-default main">Main</button>
+            <button ng-click="game.playAgain(game.lastWord, true)" data-dismiss="modal" class="btn btn-default play-again">Play Again</button>
+            <button ng-click="home.gameboard = false; game.playAgain(game.lastWord, true)" data-dismiss="modal" class="btn btn-default main">Main</button>
           </div>
         </div>
       </div>
@@ -109,24 +109,8 @@
             <p id="definition">Not quite. Why not try again or get a new word.</p>
           </div>
           <div class="modal-button-options pull-right">
-            <button ng-click="game.playAgain(game.lastWord, false)" type="button" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
-            <button ng-click="game.playAgain(game.lastWord, new)" type="button" data-dismiss="modal" class="btn btn-default main">New Word</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Level Up Modal -->
-  <div class="modal fade" id="levelUpModal" tabindex="-1" role="dialog" data-backdrop="static">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div id="prompt-modal-body" class="modal-body">
-          <img class="verdict" src="/images/level-up.png">
-          <div id="fun-fact">
-            <p id="definition">Nice word streak! Keep going!</p>
-          </div>
-          <div class="modal-button-options">
-            <button type="button" data-dismiss="modal" class="btn btn-default next-level center-block">Continue</button>
+            <button ng-click="game.playAgain(game.lastWord, false)" data-dismiss="modal" class="btn btn-default play-again">Try Again</button>
+            <button ng-click="game.playAgain(game.lastWord, new)" data-dismiss="modal" class="btn btn-default main">New Word</button>
           </div>
         </div>
       </div>

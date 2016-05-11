@@ -11,7 +11,6 @@ var url = 'mongodb://metcalfec:calv1n@ds013212.mlab.com:13212/spell-bound'
 var array = [];
 var currentUser;
 
-
 app.use(express.static('./public/'));
 app.use(cookieParser());
 app.use(jsonParser);
@@ -80,7 +79,8 @@ app.post('/user', function(req, res) {
           streak: 0,
           completed: [],
           level: 1,
-          score: 0
+          score: 0,
+          difficulty: 'Easy'
         }, function(error, results) {
       });
       var newUser = {
@@ -88,10 +88,11 @@ app.post('/user', function(req, res) {
         streak: 0,
         completed: [],
         level: 1,
-        score: 0
+        score: 0,
+        difficulty: 'Easy'
       };
       res.cookie('name', titleCase(currentUser));
-      res.json(newUser);
+      res.send(newUser);
       db.close();
     } else {
       res.sendStatus(500);
@@ -112,10 +113,13 @@ app.get('/start', function(req, res) {
           word: randomResults.word.toUpperCase(),
           wordArray: array,
           image: randomResults.image,
-          caps: randomResults.word.toUpperCase(),
-          sound: randomResults.sound,
           speech: randomResults.speech,
           definition: randomResults.definition,
+          completed: [],
+          streak: 0,
+          level: 1,
+          score: 0,
+          difficulty: 'Easy'
         }
         res.send(game);
         db.close();
@@ -134,6 +138,7 @@ app.post('/continue', function(req, res) {
   var streakCount = 0;
   var currentLevel = 1;
   var highScore = 0;
+  var currentDifficulty = 'Easy';
   myClient.connect(url, function(error, db) {
     if (!error) {
       var users = db.collection('users');
@@ -143,27 +148,50 @@ app.post('/continue', function(req, res) {
           streakCount = results[0].streak;
           currentLevel = results[0].level;
           highScore = results[0].score;
+          currentDifficulty = results[0].difficulty;
         }
       });
       var word = db.collection('easy');
       word.find({}).toArray(function(error, results) {
-        var randomResults = results[Math.floor(Math.random() * results.length)];
-        letterArray(randomResults.word.toUpperCase());
-        var game = {
-          word: randomResults.word.toUpperCase(),
-          wordArray: array,
-          image: randomResults.image,
-          caps: randomResults.word.toUpperCase(),
-          sound: randomResults.sound,
-          speech: randomResults.speech,
-          definition: randomResults.definition,
-          completed: completedWords,
-          streak: streakCount,
-          level: currentLevel,
-          score: highScore
-        };
-        res.send(game);
-        db.close();
+        if (currentDifficulty === 'Easy') {
+          var randomResults = results[Math.floor(Math.random() * results.length)];
+          letterArray(randomResults.word.toUpperCase());
+          var game = {
+            word: randomResults.word.toUpperCase(),
+            wordArray: array,
+            image: randomResults.image,
+            speech: randomResults.speech,
+            definition: randomResults.definition,
+            completed: completedWords,
+            streak: streakCount,
+            level: currentLevel,
+            score: highScore,
+            difficulty: currentDifficulty
+          };
+          res.send(game);
+          db.close();
+        }
+      });
+      var med = db.collection('medium');
+      med.find({}).toArray(function(error, results) {
+        if (currentDifficulty === 'Medium') {
+          var randomResults = results[Math.floor(Math.random() * results.length)];
+          letterArray(randomResults.word.toUpperCase());
+          var game = {
+            word: randomResults.word.toUpperCase(),
+            wordArray: array,
+            image: randomResults.image,
+            speech: randomResults.speech,
+            definition: randomResults.definition,
+            completed: completedWords,
+            streak: streakCount,
+            level: currentLevel,
+            score: highScore,
+            difficulty: currentDifficulty
+          };
+          res.send(game);
+          db.close();
+        }
       });
     } else {
       res.sendStatus(500);
@@ -178,6 +206,7 @@ app.post('/game', function(req, res) {
   var streakCount = req.body.streak;
   var currentLevel = req.body.level;
   var highScore = req.body.score;
+  var currentDifficulty = req.body.difficulty;
   myClient.connect(url, function(error, db) {
     if (!error) {
       if (req.body.pass === true) {
@@ -199,33 +228,87 @@ app.post('/game', function(req, res) {
             }
           }, function(error, results) {
         });
-        if (req.body.streak % 10 === 0 && req.body.streak !== 0) {
+        if (streakCount % 10 === 0 && streakCount !== 0) {
+          console.log(streakCount)
           currentLevel += 1;
-          updateUser.update(
-            {name: titleCase(currentUser)},
-            {$set: {level: currentLevel}},
-            function(error, results) {
-          });
-        }
-        var theWord = db.collection('easy');
-        theWord.find({}).toArray(function(error, results) {
-          var randomResults = results[Math.floor(Math.random() * results.length)];
-          letterArray(randomResults.word.toUpperCase());
-          var game = {
-            word: randomResults.word.toUpperCase(),
-            wordArray: array,
-            image: randomResults.image,
-            caps: randomResults.word.toUpperCase(),
-            sound: randomResults.sound,
-            speech: randomResults.speech,
-            definition: randomResults.definition,
-            streak: streakCount,
-            completed: completedWords,
-            level: currentLevel,
-            score: highScore
+          switch (currentLevel) {
+            case 2:
+              currentDifficulty = 'Medium';
+              updateUser.update(
+                {name: titleCase(currentUser)},
+                {
+                  $set: {
+                    level: currentLevel,
+                    difficulty: 'Medium'
+                  }
+                }, function(error, results) {
+              });
+              break;
+            case 3:
+              updateUser.update(
+                {name: titleCase(currentUser)},
+                {
+                  $set: {
+                    level: currentLevel,
+                    difficulty: 'Medium'
+                  }
+                }, function(error, results) {
+              });
+              break;
+            default:
+              updateUser.update(
+                {name: titleCase(currentUser)},
+                {
+                  $set: {
+                    level: currentLevel,
+                    difficulty: 'Medium'
+                  }
+                }, function(error, results) {
+              });
+              break;
           }
-          res.send(game);
-          db.close();
+        }
+        var easyWord = db.collection('easy');
+        easyWord.find({}).toArray(function(error, results) {
+          if (currentDifficulty === 'Easy') {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              speech: randomResults.speech,
+              definition: randomResults.definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
+        });
+        var medWord = db.collection('medium');
+        medWord.find({}).toArray(function(error, results) {
+          if (currentDifficulty === 'Medium') {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              speech: randomResults.speech,
+              definition: randomResults.definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
         });
       }
       else if (req.body.pass === false) {
@@ -236,24 +319,46 @@ app.post('/game', function(req, res) {
           {$set: {streak: streakCount}},
           function(error, results) {
         });
-        var theWord = db.collection('easy');
-        theWord.find({word: titleCase(req.body.word)}).toArray(function(error, results) {
-          letterArray(results[0].word.toUpperCase());
-          var redo = {
-            word: results[0].word.toUpperCase(),
-            wordArray: array,
-            image: results[0].image,
-            caps: results[0].word.toUpperCase(),
-            sound: results[0].sound,
-            speech: results[0].speech,
-            definition: results[0].definition,
-            streak: streakCount,
-            completed: completedWords,
-            level: currentLevel,
-            score: highScore
+        var easyWord = db.collection('easy');
+        easyWord.find({word: titleCase(req.body.word)}).toArray(function(error, results) {
+          if (currentDifficulty === 'Easy') {
+            letterArray(results[0].word.toUpperCase());
+            var game = {
+              word: results[0].word.toUpperCase(),
+              wordArray: array,
+              image: results[0].image,
+              speech: results[0].speech,
+              definition: results[0].definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
           }
-          res.send(redo);
-          db.close();
+        });
+        var medWord = db.collection('medium');
+        medWord.find({word: titleCase(req.body.word)}).toArray(function(error, results) {
+          if (currentDifficulty === 'Medium') {
+            console.log(results)
+            letterArray(results[0].word.toUpperCase());
+            var game = {
+              word: results[0].word.toUpperCase(),
+              wordArray: array,
+              image: results[0].image,
+              speech: results[0].speech,
+              definition: results[0].definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
         });
       } else {
         streakCount = 0;
@@ -263,25 +368,47 @@ app.post('/game', function(req, res) {
           {$set: {streak: streakCount}},
           function(error, results) {
         });
-        var theWord = db.collection('easy');
-        theWord.find({}).toArray(function(error, results) {
-          var randomResults = results[Math.floor(Math.random() * results.length)];
-          letterArray(randomResults.word.toUpperCase());
-          var game = {
-            word: randomResults.word.toUpperCase(),
-            wordArray: array,
-            image: randomResults.image,
-            caps: randomResults.word.toUpperCase(),
-            sound: randomResults.sound,
-            speech: randomResults.speech,
-            definition: randomResults.definition,
-            streak: streakCount,
-            completed: completedWords,
-            level: currentLevel,
-            score: highScore
+        var easyWord = db.collection('easy');
+        easyWord.find({}).toArray(function(error, results) {
+          if (currentDifficulty === 'Easy') {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              speech: randomResults.speech,
+              definition: randomResults.definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
           }
-          res.send(game);
-          db.close();
+        });
+        var medWord = db.collection('medium');
+        medWord.find({}).toArray(function(error, results) {
+          if (currentDifficulty === 'Medium') {
+            var randomResults = results[Math.floor(Math.random() * results.length)];
+            letterArray(randomResults.word.toUpperCase());
+            var game = {
+              word: randomResults.word.toUpperCase(),
+              wordArray: array,
+              image: randomResults.image,
+              speech: randomResults.speech,
+              definition: randomResults.definition,
+              completed: completedWords,
+              streak: streakCount,
+              level: currentLevel,
+              score: highScore,
+              difficulty: currentDifficulty
+            };
+            res.send(game);
+            db.close();
+          }
         });
       }
     } else {
