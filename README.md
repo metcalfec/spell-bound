@@ -5,7 +5,7 @@ Build your vocabulary through a fun spelling game
 ## Demo
 ```
 
-https://spellbound.herokuapp.com
+Deployed on Heroku [Play Now](https://spellbound.herokuapp.com)
 
 ```
 
