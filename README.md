@@ -3,11 +3,8 @@
 Build your vocabulary through a fun spelling game
 
 ## Demo
-```
-
 Deployed on Heroku [Play Now](https://spellbound.herokuapp.com)
 
-```
 
 <img src="https://cloud.githubusercontent.com/assets/17256216/15223501/a6c0ccca-1829-11e6-8bdf-7ae43afe6ae7.png" width="90%"></img> <img src="https://cloud.githubusercontent.com/assets/17256216/15223517/bcf39c70-1829-11e6-81eb-45892bc3f9b8.png" width="15%"></img>  <img
 src="https://cloud.githubusercontent.com/assets/17256216/15223512/b4d90bec-1829-11e6-9617-eeab460bab55.png" width="15%"></img> <img src="https://cloud.githubusercontent.com/assets/17256216/15223522/c307a96c-1829-11e6-818e-9f246e233ff6.png" width="15%"></img>  <img src="https://cloud.githubusercontent.com/assets/17256216/15223506/ae2c137a-1829-11e6-8f2e-c4b62412505c.png" width="15%"></img> <img src="https://cloud.githubusercontent.com/assets/17256216/15223508/b079d98c-1829-11e6-9422-0836338853af.png" width="15%"></img> <img src="https://cloud.githubusercontent.com/assets/17256216/15223498/a30f46ba-1829-11e6-9f40-9cec2118f899.png" width="15%"></img>
